@@ -1,60 +1,35 @@
-#include "dependencies.h"
+/* MAKE AN ACTUAL INTRODUCTORY LINES */
+
+/*
+	NOTES: before reading source files any further...
+	- char *params in function that accepts filename follows this rule:
+		[absPath->originate from root, xFile->have .ext, xFilename->doesn't have .ext]
+*/
 
 
-// Main function
-int main() 
+/* Core library */
+#include "raylib.h"
+
+
+/* Complementary library */
+#include "state_machine/stateMachine.h"
+#include "systems/timer.h"
+
+
+/* Preprocessors */
+#define FPS 60.0f
+#define SCREEN_WIDTH 1680
+
+#define SCREEN_HEIGHT 1050
+
+
+// Start of the program
+int main(void)
 {
-	
-	// Initialization
-	//-------------------------------------------------------------------------------------
-	const int screenWidth = 1200;
-	const int screenHeight = 900;
-	InitWindow(screenWidth, screenHeight, "Racing Game");
-	SetTargetFPS(90);
-	
-	Texture2D ground = LoadTexture("assets/land.png");
-
-	InitPlayer();
-	
-	Camera2D camera = { 0 };
-	camera.offset = (Vector2){ GetScreenWidth()/2, GetScreenHeight()/2 };
-	camera.rotation = 0.0f;
-	camera.zoom = 1.5f;
-	//-------------------------------------------------------------------------------------
-	
-	
-	// Main game loop
-	while (!WindowShouldClose())
-	{
-		// Update
-		//---------------------------------------------------------------------------------
-		UpdatePlayer();
-		camera.target = (Vector2){ GetPlayerX(), GetPlayerY() };
-		//---------------------------------------------------------------------------------
-		
-		
-		// Draw
-		//---------------------------------------------------------------------------------
-		BeginDrawing();
-		
-			ClearBackground(BLACK);
-			
-			BeginMode2D(camera);
-			
-				DrawTexture(ground, 0, 0, WHITE);
-				DrawPlayer();
-				
-			EndMode2D();
-		
-			DrawText(TextFormat("FPS: %.2f", (float)GetFPS()), 10, 10, 20, WHITE);
-			DrawText(TextFormat("Player X: %.2f", GetPlayerX()), 10, 40, 20, WHITE);
-			DrawText(TextFormat("Player Y: %.2f", GetPlayerY()), 10, 70, 20, WHITE);
-			
-		EndDrawing();
-		//---------------------------------------------------------------------------------
-	}
-	
-	// Exit the program
+	InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Racing Game");
+	SetWindowPosition(10, 10);
+	SetupGameTime(FPS, 1.0f);
+	while (RunStateMachine());
 	CloseWindow();
 	return 0;
 }
