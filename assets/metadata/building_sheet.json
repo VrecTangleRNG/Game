@@ -1,0 +1,87 @@
+{
+  "frames": {
+    "building1.png": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 220
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 220
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 220
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "building3.png": {
+      "frame": {
+        "x": 0,
+        "y": 220,
+        "w": 256,
+        "h": 177
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 177
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 177
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "building2.png": {
+      "frame": {
+        "x": 0,
+        "y": 397,
+        "w": 256,
+        "h": 143
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 143
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 143
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "building_sheet.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 256,
+      "h": 540
+    },
+    "scale": 1
+  }
+}
