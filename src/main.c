@@ -28,7 +28,7 @@ int main(void)
 {
 	InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Racing Game");
 	SetWindowPosition(10, 10);
-	SetupGameTime(FPS, .5f);
+	SetupGameTime(FPS, 1.0f);
 	while (RunStateMachine());
 	CloseWindow();
 	return 0;

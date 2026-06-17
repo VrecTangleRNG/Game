@@ -42,10 +42,6 @@ StateIndex Update_RaceState(float deltaTime)
 		cpIndex = (cpIndex + 1) % (currentLevel->cpIdCount);
 		playerLapProg.currentCp = currentLevel->checkpointIds[cpIndex];
 	}
-	// TODO: print this
-	ExtractTime(stopwatch.elapsed, MSECONDS);
-	ExtractTime(stopwatch.elapsed, SECONDS);
-	ExtractTime(stopwatch.elapsed, MINUTES);
 
 	// Control state transition
 	if (playerLapProg.currentLap > 3)
@@ -65,8 +61,17 @@ void Draw_RaceState(void)
 		DrawPlayer();
 	EndMode2D();
 	DrawDriveModeUi();
-	DrawText(TextFormat("Lap time: %.2f", stopwatch.elapsed), 10, 30, 30, BLACK);
-	// TODO: make a method to slice time into ms, s, and m and print the result
+	DrawText
+	(
+		TextFormat
+		(
+			"Lap time: %02d:%02d.%03d",
+			ExtractTime(stopwatch.elapsed, MINUTES),
+			ExtractTime(stopwatch.elapsed, SECONDS),
+			ExtractTime(stopwatch.elapsed, MSECONDS)
+		),
+		10, 30, 30, BLACK
+	);
 	DrawText(TextFormat("Lap: %d/3", playerLapProg.currentLap), 10, 60, 30, BLACK);
 }
 

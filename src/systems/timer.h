@@ -2,7 +2,7 @@
 #define TIMER_H
 
 #include <stdbool.h>
-#include <stdio.h> 
+#include <stdio.h>
 
 #include "raylib.h"
 
@@ -49,6 +49,6 @@ void CountdownUpdate(Countdown *cd);
 // Utility functions
 float GetConstantFPS(void);
 Time *GetVirtualTime(void);
-char *ExtractTime(float fsecs, smalluint measure);
+meduint ExtractTime(float fsecs, smalluint measure);
 
 #endif
