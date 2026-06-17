@@ -9,7 +9,7 @@ static bool firstIteration = true;
 
 
 // Initialize // Runs only once at directly before game loop
-void Init_RaceState(void)
+INIT_STATE(Race)
 {
 	StopwatchStart(&stopwatch);
 	currentLevel = GetRunningLevel();
@@ -18,7 +18,7 @@ void Init_RaceState(void)
 
 
 // Update // Control the program flow with the return value
-StateIndex Update_RaceState(float deltaTime)
+UPDATE_STATE(Race)
 {
 	// Update lap time and player
 	StopwatchUpdate(&stopwatch);
@@ -54,13 +54,14 @@ StateIndex Update_RaceState(float deltaTime)
 
 
 // Draw // Generic draw function runs directly after update
-void Draw_RaceState(void)
+DRAW_STATE(Race)
 {
 	BeginMode2D(GetCamera());
 		DrawMap();
 		DrawPlayer();
 	EndMode2D();
 	DrawDriveModeUi();
+	// Lap timer
 	DrawText
 	(
 		TextFormat
@@ -72,12 +73,13 @@ void Draw_RaceState(void)
 		),
 		10, 30, 30, BLACK
 	);
+	// Lap progress counter
 	DrawText(TextFormat("Lap: %d/3", playerLapProg.currentLap), 10, 60, 30, BLACK);
 }
 
 
 // Escape // Return 1 to continue running, 0 to exit program entirely
-int Escape_RaceState(StateIndex toState)
+ESCAPE_STATE(Race)
 {
 	switch (toState)
 	{

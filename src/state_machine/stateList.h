@@ -30,17 +30,23 @@
 #include "../systems/timer.h"
 #include "../systems/utils.h"
 
+// X(enum, function tag)
 #define GAME_STATES \
 	X(STATE_COUNTDOWN, Countdown)\
 	X(STATE_EXIT, Exit)\
 	X(STATE_HIGHLIGHT, Highlight)\
 	X(STATE_RACE, Race)
 
+#define INIT_STATE(function) void Init_##function##State(void)
+#define UPDATE_STATE(function) StateIndex Update_##function##State(float deltaTime)
+#define DRAW_STATE(function) void Draw_##function##State(void)
+#define ESCAPE_STATE(function) int Escape_##function##State(StateIndex toState)
+
 #define STATE_DECLARATION(function) \
-	void Init_##function##State(void);\
-	StateIndex Update_##function##State(float deltaTime);\
-	void Draw_##function##State(void);\
-	int Escape_##function##State(StateIndex toState);
+	INIT_STATE(function);\
+	UPDATE_STATE(function);\
+	DRAW_STATE(function);\
+	ESCAPE_STATE(function);
 
 #define STATE_LIST_DECLARATION(function) \
 	{ Init_##function##State, \
