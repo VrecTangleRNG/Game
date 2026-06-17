@@ -2,8 +2,11 @@
 #define TIMER_H
 
 #include <stdbool.h>
+#include <stdio.h> 
 
 #include "raylib.h"
+
+#include "utils.h"
 
 typedef struct
 {
@@ -27,6 +30,14 @@ typedef struct
 	bool finished;
 } Countdown;
 
+typedef enum
+{
+	MSECONDS = 0,
+	SECONDS,
+	MINUTES,
+	HOURS
+} TimeMeasurement;
+
 // main functions
 void SetupGameTime(const float targetFPS, const float scale);
 void UpdateGameTime(void);
@@ -38,5 +49,6 @@ void CountdownUpdate(Countdown *cd);
 // Utility functions
 float GetConstantFPS(void);
 Time *GetVirtualTime(void);
+char *ExtractTime(float fsecs, smalluint measure);
 
 #endif

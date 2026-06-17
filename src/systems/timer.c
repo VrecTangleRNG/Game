@@ -71,4 +71,33 @@ Time *GetVirtualTime(void)
 {
 	return &virtualTime;
 }
+
+char *ExtractTime(float fsecs, smalluint measure)
+{
+	static char buffer[3];
+	meduint scalar = 0;
+	switch (measure)
+	{
+		case MSECONDS:
+			scalar = ((meduint)(fsecs * 1000) % 1000);
+			sprintf(buffer, "%03d", scalar);
+			break;
+
+		case SECONDS:
+			scalar = (meduint)fsecs;
+			break;
+
+		case MINUTES:
+			scalar = (meduint)(fsecs / 60.0f) % 60;
+			break;
+
+		case HOURS:	// Ain't no way the player will race for hours
+			scalar = (meduint)(fsecs / 3600.0f) % 24;
+			break;
+
+		default: break;
+	}
+	if (measure != MSECONDS) sprintf(buffer, "%02d", scalar);
+	return buffer;
+}
 /* --- ------- --- */

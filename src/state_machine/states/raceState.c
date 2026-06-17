@@ -42,6 +42,10 @@ StateIndex Update_RaceState(float deltaTime)
 		cpIndex = (cpIndex + 1) % (currentLevel->cpIdCount);
 		playerLapProg.currentCp = currentLevel->checkpointIds[cpIndex];
 	}
+	// TODO: print this
+	ExtractTime(stopwatch.elapsed, MSECONDS);
+	ExtractTime(stopwatch.elapsed, SECONDS);
+	ExtractTime(stopwatch.elapsed, MINUTES);
 
 	// Control state transition
 	if (playerLapProg.currentLap > 3)
