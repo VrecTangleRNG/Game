@@ -8,7 +8,7 @@
 
 static Level *runningLevel = NULL;
 static Level *levels = NULL;    // TODO: not yet freed
-static int levelCount = 0;
+static meduint levelCount = 0;
 /* --- ----------------------- --- */
 
 
@@ -30,11 +30,11 @@ void LoadCurrentLevel(char *tilemapFile, char *levelFile)
         cJSON *source = cJSON_GetObjectItem(world, "source");
 
         // Check for loading level in a matching world
-        if (strcmp(source->valuestring, tilemapFile) == 0)
+        if (strcmp(source->valuestring, TextFormat("metadata/maps/%s", tilemapFile)) == 0)
         {
             cJSON *levelsJSON = cJSON_GetObjectItem(world, "levels");
             cJSON *level = NULL;
-            int levelCount = cJSON_GetArraySize(levelsJSON);
+            meduint levelCount = cJSON_GetArraySize(levelsJSON);
 
             // Allocate memory for levels container
             if (!levels) levels = malloc(sizeof(Level));
@@ -68,6 +68,8 @@ void LoadCurrentLevel(char *tilemapFile, char *levelFile)
                 {
                     int cpId = cJSON_GetArrayItem(checkpoints, i)->valueint;
                     levels[levelIndex].checkpointIds[i] = cpId;
+                    levels[levelIndex].cpIdCount = i + 1;
+                    // DEBUG: printf("cpId: %d, i: %d\n", levels[levelIndex].checkpointIds[i], i);
                 }
                 levels[levelIndex].mode = type->valueint;
                 levels[levelIndex].angle = angle->valuedouble;
@@ -98,3 +100,13 @@ Level *GetRunningLevel(void)
     return runningLevel;
 }
 /* --- ------------ --- */
+
+
+/* --- Game Mode exclusive functions --- */
+
+void InitLapTracker(LapTracker *lap, Level *level)
+{
+    lap->currentLap = 1;
+    lap->currentCp = level->checkpointIds[0];
+}
+/* --- ----------------------------- --- */

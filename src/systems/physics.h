@@ -15,7 +15,7 @@
 // NOTE: Call CheckSensorCollision after calling UpdatePhysics in a loop
 void InitPhysics(void);
 void UpdatePhysics(float timeStep, float deltaTime);
-b2ShapeId CheckSensorCollision(b2ShapeId *targetShape, b2ShapeId *sensorShape, int check);
+b2ShapeId *CheckSensorCollision(b2ShapeId *targetShape, b2ShapeId *sensorShape, int check);// "check" = 1 will return entered shape id, vice versa for -1
 
 // Utility functions
 b2WorldId GetWorldId(void);

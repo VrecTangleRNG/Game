@@ -8,10 +8,10 @@
 
 // Global constants
 static float
-	LINEAR_DAMPING 	= 2.5f,																// Between 2.0 ~ 8.0
+	LINEAR_DAMPING 	= 2.5f,										// Between 2.0 ~ 8.0
 	ANGULAR_DAMPING	= 14.0f,
 	DENSITY 		= 50.0f / (PX_PER_METER * PX_PER_METER),	// kg / m^2
-	F_ENGINE 		= 25000.0f * PX_PER_METER,								// kg * m / sec^2
+	F_ENGINE 		= 25000.0f * PX_PER_METER,					// kg * m / sec^2
 	TIRE_GRIP		= 0.85f,
 	STEERING_SPEED	= 600.0f;
 
@@ -204,5 +204,10 @@ Vector2 GetCenterPlayerPos(void)
 Vector2 GetEdgePlayerPos(void)
 {
 	return B2vecToRlvec(carPosEdge);
+}
+
+b2ShapeId *GetPlayerShape(void)
+{
+	return &(car.shapeId);
 }
 /* --- ------- --- */

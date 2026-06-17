@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <math.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,6 +13,9 @@
 #include "box2d/box2d.h"
 
 #define TRIE_SIZE 36
+
+#define smalluint uint8_t
+#define meduint uint16_t
 
 typedef struct Node
 {
@@ -31,7 +35,7 @@ int IntPower(int base, int exp);
 int ExtractNumerics(char *string);
 
 // String related function
-void TruncateString(char *string, signed int cut);
+void TruncateString(char *string, signed int cut);				// Cut string from index "cut"
 
 // Vector related utilities
 Vector2 B2vecToRlvec(b2Vec2 v);

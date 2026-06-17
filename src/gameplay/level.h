@@ -21,12 +21,23 @@ typedef struct
     RaceGameMode mode;
     float angle;
     char name[20];
-    int spawnpointId;
-    int *checkpointIds;
+    meduint spawnpointId;
+    meduint *checkpointIds; // TODO: later fix this member allocation type
+    meduint cpIdCount;
 } Level;
+
+// Game mode exclusive objects //
+typedef struct
+{
+    smalluint currentLap;
+    smalluint currentCp;
+} LapTracker;
 
 void LoadCurrentLevel(char *tilemapFile, char *levelFile);
 void SetRunningLevelIndex(int levelIndex);
 Level *GetRunningLevel(void);
+
+// Game mode exclusive funstions
+void InitLapTracker(LapTracker *lap, Level *level);
 
 #endif

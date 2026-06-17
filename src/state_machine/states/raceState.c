@@ -3,6 +3,9 @@
 
 static Stopwatch stopwatch;
 static Level *currentLevel = NULL;
+static LapTracker playerLapProg = { 0 };
+static smalluint cpIndex = 0;
+static bool firstIteration = true;
 
 
 // Initialize // Runs only once at directly before game loop
@@ -10,23 +13,42 @@ void Init_RaceState(void)
 {
 	StopwatchStart(&stopwatch);
 	currentLevel = GetRunningLevel();
+	InitLapTracker(&playerLapProg, currentLevel);
 }
 
 
 // Update // Control the program flow with the return value
 StateIndex Update_RaceState(float deltaTime)
 {
+	// Update lap time and player
 	StopwatchUpdate(&stopwatch);
 	UpdatePlayer(deltaTime);
 	Vector2 playerPos = GetCenterPlayerPos();
 	SetCameraPos(&playerPos);
 
+	// Update physics
 	float timeStep = 1.0f * GetVirtualTime()->scale / GetConstantFPS();
 	UpdatePhysics(timeStep, deltaTime);
 
-	//GetCpShapeFromId(/* TODO */);
+	// Update lap
+		// Check whether the player has passed the target checkpoint
+	b2ShapeId *targetCpShape = GetCpShapeFromId(playerLapProg.currentCp);
+	b2ShapeId *overlapCp = CheckSensorCollision(GetPlayerShape(), NULL, 1);
+	if (overlapCp != NULL && B2_ID_EQUALS(*overlapCp, *targetCpShape))
+	{
+			// Check if player reached finish line (ignore first check first checkpoint)
+		if (cpIndex == 0 && !firstIteration) playerLapProg.currentLap++;
+		firstIteration = false;
+		cpIndex = (cpIndex + 1) % (currentLevel->cpIdCount);
+		playerLapProg.currentCp = currentLevel->checkpointIds[cpIndex];
+	}
 
 	// Control state transition
+	if (playerLapProg.currentLap > 3)
+	{
+		playerLapProg.currentLap = 3;
+		return STATE_EXIT;				// TODO: make result screen state
+	}
 	return STATE_CONTINUE;
 }
 
@@ -40,6 +62,8 @@ void Draw_RaceState(void)
 	EndMode2D();
 	DrawDriveModeUi();
 	DrawText(TextFormat("Lap time: %.2f", stopwatch.elapsed), 10, 30, 30, BLACK);
+	// TODO: make a method to slice time into ms, s, and m and print the result
+	DrawText(TextFormat("Lap: %d/3", playerLapProg.currentLap), 10, 60, 30, BLACK);
 }
 
 

@@ -9,9 +9,9 @@
 #define SENSOR_RETURN_SHAPE \
 	if (!targetShape)\
 	{\
-		if (B2_ID_EQUALS(*sensorShape, currentSensor)) return currentVisitor;\
+		if (B2_ID_EQUALS(*sensorShape, *currentSensor)) return currentVisitor;\
 	}\
-	else if (B2_ID_EQUALS(*targetShape, currentVisitor)) return currentSensor
+	else if (B2_ID_EQUALS(*targetShape, *currentVisitor)) return currentSensor
 /* --- ------------- --- */
 
 
@@ -42,11 +42,11 @@ void UpdatePhysics(float timeStep, float deltaTime)
 	}
 }
 
-b2ShapeId CheckSensorCollision(b2ShapeId *targetShape, b2ShapeId *sensorShape, int check)
+b2ShapeId *CheckSensorCollision(b2ShapeId *targetShape, b2ShapeId *sensorShape, int check)
 {
 	b2SensorEvents worldEvents = b2World_GetSensorEvents(GetWorldId());
-	b2ShapeId currentSensor;
-	b2ShapeId currentVisitor;
+	b2ShapeId *currentSensor;
+	b2ShapeId *currentVisitor;
 
 	switch (check)
 	{
@@ -55,8 +55,8 @@ b2ShapeId CheckSensorCollision(b2ShapeId *targetShape, b2ShapeId *sensorShape, i
 			for (int i = 0; i < worldEvents.beginCount; i++)
 			{
 				b2SensorBeginTouchEvent *beginTouch = worldEvents.beginEvents + i;
-				currentSensor = beginTouch->sensorShapeId;
-				currentVisitor = beginTouch->visitorShapeId;
+				currentSensor = &(beginTouch->sensorShapeId);
+				currentVisitor = &(beginTouch->visitorShapeId);
 				SENSOR_RETURN_SHAPE;
 			}
 			break;
@@ -69,8 +69,8 @@ b2ShapeId CheckSensorCollision(b2ShapeId *targetShape, b2ShapeId *sensorShape, i
 				b2SensorEndTouchEvent *endTouch = worldEvents.endEvents + i;
 				if((b2Shape_IsValid(endTouch->visitorShapeId)))
 				{
-					currentSensor = endTouch->sensorShapeId;
-					currentVisitor = endTouch->visitorShapeId;
+					currentSensor = &(endTouch->sensorShapeId);
+					currentVisitor = &(endTouch->visitorShapeId);
 				}
 				SENSOR_RETURN_SHAPE;
 			}
@@ -78,7 +78,7 @@ b2ShapeId CheckSensorCollision(b2ShapeId *targetShape, b2ShapeId *sensorShape, i
 
 		default: break;
 	}
-	return (b2ShapeId){ 0 };
+	return NULL;
 }
 /* --- ------------ --- */
 
