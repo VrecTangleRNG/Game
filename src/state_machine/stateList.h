@@ -35,7 +35,8 @@
 	X(STATE_COUNTDOWN, Countdown)\
 	X(STATE_EXIT, Exit)\
 	X(STATE_HIGHLIGHT, Highlight)\
-	X(STATE_RACE, Race)
+	X(STATE_RACE, Race)\
+	X(STATE_RESULT, Result)
 
 #define INIT_STATE(function) void Init_##function##State(void)
 #define UPDATE_STATE(function) StateIndex Update_##function##State(float deltaTime)

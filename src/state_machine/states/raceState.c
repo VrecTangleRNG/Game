@@ -47,7 +47,7 @@ UPDATE_STATE(Race)
 	if (playerLapProg.currentLap > 3)
 	{
 		playerLapProg.currentLap = 3;
-		return STATE_EXIT;				// TODO: make result screen state
+		return STATE_RESULT;
 	}
 	return STATE_CONTINUE;
 }
@@ -84,10 +84,13 @@ ESCAPE_STATE(Race)
 	switch (toState)
 	{
 		case STATE_EXIT:
+			// TODO: Move these lines of codes to exit state
 			FreeMapDatas();
 			DestroyMapBodies();
 			FreeAllTextures();
 			return 1;
+
+		case STATE_RESULT: return 1;
 
 		default: return 1;
 	}
