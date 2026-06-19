@@ -8,10 +8,9 @@
 
 const States stateList[STATE_COUNT] =
 {
-	STATE_LIST_DECLARATION(Base),
-	#define X(enum, function) STATE_LIST_DECLARATION(function), 
+	STATE_LIST_DECLARATION(Base, base),
+	#define X(enum, function, string) STATE_LIST_DECLARATION(function, string),
 	GAME_STATES
 	#undef X
 };
 /* --- ---------------- --- */
-

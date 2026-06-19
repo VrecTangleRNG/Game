@@ -4,8 +4,8 @@
 #include "raylib.h"
 
 #include "stateList.h"
-#include "../systems/timer.h"
 
+int RunStateStack(void);
 int RunStateMachine(void);
 
 #endif
