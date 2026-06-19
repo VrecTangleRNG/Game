@@ -23,12 +23,25 @@ typedef struct Node
 	struct Node *next[TRIE_SIZE];	// Lowercases and decimal digits
 } Trie;
 
-// Trie related functions
-Trie *CreateTrie(void);				// Free memory using FreeTrie()
+typedef struct List
+{
+	void *valueptr;
+	struct List *next;
+} Stack;
+
+
+// Data structures related functions
+	//Trie
+Trie *CreateTrie(void);
 void InsertTrie(Trie *root, char *strpath, void *valueptr);
 void *SearchTrie(Trie *root, char *strpath);
 void FreeTrie(Trie *root);
 int Hash(char c);
+	// Linked list A.K.A Stack
+Stack *CreateStack(void);
+void Push(Stack **head, void *valueptr);
+void *Pop(Stack **head);
+#define StackForEach(item, stack) for (item = (stack); item != NULL; item = (item)->next)
 
 // Linear math related functions
 int IntPower(int base, int exp);

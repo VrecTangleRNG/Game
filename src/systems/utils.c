@@ -8,7 +8,7 @@
 Trie *CreateTrie(void)
 {
 	Trie *root = malloc(sizeof(Trie));
-	if (!root) return NULL;
+	if (!root) {printf("Unable to create Trie"); return NULL;}
 	root->valueptr = NULL;
 	for (int i = 0; i < TRIE_SIZE; i++)
 	{
@@ -59,7 +59,35 @@ int Hash(char c)
 	else if (isdigit(c)) return c - '0' + 26;
 }
 
-// TODO: move this to physics.c
+Stack *CreateStack(void)
+{
+	Stack *base = malloc(sizeof(Stack));
+	if (!base) {printf("Unable to create Stack"); return NULL;}
+	base->valueptr = NULL;
+	base->next = NULL;
+	return base;
+}
+
+void Push(Stack **head, void *valueptr)
+{
+	Stack *buffer = CreateStack();
+	if (buffer != NULL)
+	{
+		buffer->valueptr = valueptr;
+		buffer->next = *head;
+		*head = buffer;
+	}
+}
+
+void *Pop(Stack **head)
+{
+	if (!head || !(*head)) return NULL;
+	Stack *temp = *head;
+	void *valueptr = temp->valueptr;
+	*head = (*head)->next;
+	if (temp) free(temp);
+	return valueptr;
+}
 
 int IntPower(int base, int exp)
 {
@@ -119,14 +147,14 @@ char *GetStringFromFile(const char *absPath)
 		long size = ftell(file);
 		rewind(file);
 		buffer = malloc(size + 1);
-		
+
 		// CAUTION: this malloc needs to be freed by receiver
 		if (buffer != NULL)
 		{
 			fread(buffer, size, 1, file);
 			buffer[size] = '\0';
 		}
-		else 
+		else
 		{
 			fclose(file);
 			return NULL;
