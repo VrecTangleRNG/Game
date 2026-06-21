@@ -2,14 +2,10 @@
 static StateStatus status = { STATE_CONTINUE, false, false };
 
 
-// Global variables
-static Stopwatch transition;
-
-
 // Initialize // Runs only once at directly before game loop
 INIT_STATE(Base)
 {
-	StopwatchStart(&transition);
+	return;
 }
 
 
@@ -30,9 +26,7 @@ PAUSE_STATE(Base)
 // Draw // Generic draw function runs directly after update
 DRAW_STATE(Base)
 {
-	StopwatchUpdate(&transition);
-	if (transition.elapsed >= 4.0f) transition.running = false;
-	DrawText("Hello, world!", 10, LinearTween("test", 10, GetScreenHeight() / 2, 3.0f), 30, BLACK);
+	DrawText ("Hello, world!", 10, GetScreenHeight() * .5f, 30, (Color){ 0, 0, 0, LinearTween("fade", .0f, 255.0f, 2.0f) });
 }
 
 

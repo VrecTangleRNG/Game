@@ -8,7 +8,7 @@
 
 static float constantFPS = 0.0f;
 static Time virtualTime;
-static Trie *tweenTrie = NULL;
+static Trie *timerStorage = NULL;
 /* --- ----------------------- --- */
 
 
@@ -101,11 +101,15 @@ meduint ExtractTime(float fsecs, smalluint measure)
 
 float LinearTween(char *name, float start, float end, float duration)
 {
-	if (!tweenTrie) tweenTrie = CreateTrie();
-	Stopwatch *currentStopwatch = SearchTrie(tweenTrie, name);
-	if (!currentStopwatch) currentStopwatch = AllocateTrie(tweenTrie, name, sizeof(Stopwatch));
+	if (!timerStorage) timerStorage = CreateTrie();
+	Stopwatch *currentStopwatch = (Stopwatch *)SearchTrie(timerStorage, name);
+	if (!currentStopwatch)
+	{
+		currentStopwatch = calloc(1, sizeof(Stopwatch));
+		InsertTrie(timerStorage, name, currentStopwatch);
+	}
 	StopwatchStart(currentStopwatch);
 	if (currentStopwatch->elapsed <= duration) StopwatchUpdate(currentStopwatch);
-	return Lerp(start, end, currentStopwatch->elapsed / duration);
+	return Lerp(start, end, currentStopwatch->elapsed / duration) - 0.9f;
 }
 /* --- ------- --- */

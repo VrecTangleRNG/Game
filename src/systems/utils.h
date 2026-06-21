@@ -35,7 +35,6 @@ typedef struct List
 	//Trie
 Trie *CreateTrie(void);											// Returns trie root that extensible by InsertTrie()
 void InsertTrie(Trie *root, char *strpath, void *valueptr);		// Make a new branch to root and assign value valueptr
-void *AllocateTrie(Trie *root, char *strpath, size_t size);		// Similar to InsertTrie() but with valueptr assigned later by the user
 void *SearchTrie(Trie *root, char *strpath);					// Returns the value held by strpath, and NULL if not found
 void FreeTrie(Trie *root);										// Free a trie and its branches recursively
 int Hash(char c);												// Returns int; the index of c for trie insertion
@@ -60,6 +59,6 @@ b2Vec2 RlvecToB2vec(Vector2 v);
 Texture2D LoadPathTexture(char *path, char *filename);
 
 // File handling utilities
-char *GetStringFromFile(const char *absPath);	// CAUTION: needs to be freed by receiver
+char *GetStringFromFile(const char *absPath);					// CAUTION: needs to be freed by receiver
 
 #endif

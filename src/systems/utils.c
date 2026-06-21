@@ -30,14 +30,6 @@ void InsertTrie(Trie *root, char *strpath, void *valueptr)
 	main->valueptr = valueptr;
 }
 
-void *AllocateTrie(Trie *root, char *strpath, size_t size)
-{
-	void *space = malloc(size);
-	if (!space) return NULL;
-	InsertTrie(root, strpath, space);
-	return space;
-}
-
 void *SearchTrie(Trie *root, char *strpath)
 {
 	int i = 0;
