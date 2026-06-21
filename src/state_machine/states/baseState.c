@@ -1,29 +1,37 @@
 #include "../stateList.h"
+static StateStatus status = { STATE_CONTINUE, false, false };
 
 
-// Initialize //
-void Init_BaseState(void)
+// Initialize // Runs only once at directly before game loop
+INIT_STATE(Base)
 {
 	return;
 }
 
 
-// Update //
-StateIndex Update_BaseState(float deltaTime)
+// Update // Control the program flow with the return value
+UPDATE_STATE(Base)
 {
-	return STATE_HIGHLIGHT;
+	return &status;
 }
 
 
-// Draw //
-void Draw_BaseState(void)
+// Pause // Do something in background
+PAUSE_STATE(Base)
 {
 	return;
 }
 
 
-// Escape //
-int Escape_BaseState(StateIndex toState)
+// Draw // Generic draw function runs directly after update
+DRAW_STATE(Base)
 {
-	return 1;
+	return;
+}
+
+
+// Exit // Do clean ups before continue to the next state
+EXIT_STATE(Base)
+{
+	return;
 }

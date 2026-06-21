@@ -19,7 +19,6 @@
 /* Preprocessors */
 #define FPS 60.0f
 #define SCREEN_WIDTH 1680
-
 #define SCREEN_HEIGHT 1050
 
 
@@ -27,7 +26,6 @@
 int main(void)
 {
 	InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Racing Game");
-	SetWindowPosition(10, 10);
 	SetupGameTime(FPS, 1.0f);
 	while (RunStateStack());
 	CloseWindow();

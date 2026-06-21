@@ -1,4 +1,4 @@
-/* --- User-defined header files --- */
+/* --- Header files --- */
 
 #include "physics.h"
 /* --- ------------------------- --- */

@@ -6,8 +6,8 @@
 
 /* --- Global static variables --- */
 
-static StateIndex upcomingStateIndex = STATE_BASE;
-static States *currentState;
+static StateStatus upcomingStateStat = {STATE_BASE, false, false};
+static States *currentState = NULL;
 static Stack *stateStack = NULL;
 /* --- ----------------------- --- */
 
@@ -16,8 +16,9 @@ static Stack *stateStack = NULL;
 
 int RunStateStack(void)
 {
-	currentState = stateList + upcomingStateIndex;
-	currentState->init();	// Silly me
+	currentState = stateList + upcomingStateStat.state;
+
+	// Determine whether the stateStack is empty or already filled (if so, Push)
 	if (!stateStack)
 	{
 		stateStack = CreateStack();
@@ -27,56 +28,60 @@ int RunStateStack(void)
 	{
 		Push(&stateStack, currentState);
 	}
+	currentState->init();	// Silly me
 
 	// Game loop
 	while (true)
 	{
-		// Update head
-		UpdateGameTime();
-		upcomingStateIndex = ((States *)(stateStack->valueptr))->update(GetVirtualTime()->delta);
-
-		// Draw
+		bool firstIteration = true;
 		Stack *layer = NULL;
 		StackForEach(layer, stateStack)
 		{
-			BeginDrawing();
-			ClearBackground(GRAY);
-			((States *)(layer->valueptr))->draw();
-			EndDrawing();
+			// Update head, then pause tails
+			UpdateGameTime();
+			if (firstIteration)
+			{
+				upcomingStateStat = *(((States *)(layer->valueptr))->update(GetVirtualTime()->delta));
+				firstIteration = false;
+			}
+			else
+			{
+				((States *)(layer->valueptr))->pause();
+			}
 		}
 
-		// Continue, pop, or push
-		if (upcomingStateIndex == STATE_BREAK) {Pop(&stateStack); continue;}
-		if (upcomingStateIndex != STATE_CONTINUE) break;
-	}
-}
+		// Draw
+		layer = NULL;
+		BeginDrawing();
+		StackForEach(layer, stateStack)
+		{
+			ClearBackground(GRAY);
+			((States *)(layer->valueptr))->draw();
+		}
+		EndDrawing();
 
-// int RunStateMachine(void)
-// {
-// 	// Initialize before entering loop
-// 	currentState = stateList[currentStateIndex];
-// 	currentState.init();
-//
-// 	// Game loop
-// 	while (true)
-// 	{
-// 		UpdateGameTime();
-//
-// 		// Always check for game loop transition
-// 		upcomingStateIndex = currentState.update(GetVirtualTime()->delta);
-// 		BeginDrawing();
-// 		ClearBackground(GRAY);
-// 		currentState.draw();
-// 		EndDrawing();
-//
-// 		// Exit game on player input or continue playing
-// 		if (WindowShouldClose()) upcomingStateIndex = STATE_EXIT;
-// 		if (upcomingStateIndex != STATE_CONTINUE) break;
-// 	}
-//
-// 	// Do cleanups before state transition
-// 	currentStateIndex = upcomingStateIndex;
-// 	int isKeepRunning = currentState.escape(upcomingStateIndex);
-// 	return isKeepRunning;
-// }
+		// If none of this was run, continue the loop
+		// TODO: this was unoptimized
+		if (upcomingStateStat.pop)
+		{
+			// Pop state and run state underneath it
+			((States *)(stateStack->valueptr))->exit();
+			Pop(&stateStack);
+			continue;
+		}
+		if (upcomingStateStat.state != STATE_CONTINUE)
+		{
+			// Replace the head by poping head and pushing a new one
+			if (upcomingStateStat.replace)
+			{
+				((States *)(stateStack->valueptr))->exit();
+				Pop(&stateStack);
+			}
+
+			// Push new state
+			break;
+		}
+	}
+	return 1;
+}
 /* --- ------------ --- */

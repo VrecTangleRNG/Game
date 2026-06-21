@@ -8,12 +8,13 @@
 /* ---HOW TO ADD A STATE V2--- */
 /*
  * -> Looks definition for GAME_STATES
- * -> Adds your state there by providing X(enum, function)
+ * -> Adds your state there by providing X(enum, function, string)
  */
 
 #ifndef STATE_LIST_H
 #define STATE_LIST_H
 
+#include <stdbool.h>
 #include <stdio.h>
 
 #include "raylib.h"
@@ -30,49 +31,57 @@
 #include "../systems/timer.h"
 #include "../systems/utils.h"
 
-// X(enum, function tag)
-#define GAME_STATES \
-	X(STATE_COUNTDOWN, Countdown, cndn)\
-	X(STATE_EXIT, Exit, exit)\
-	X(STATE_HIGHLIGHT, Highlight, hglt)\
-	X(STATE_RACE, Race, race)\
-	X(STATE_RESULT, Result, resl)
+// X(enum, function, tag)
+#define GAME_STATES
+//	X(STATE_MAIN_MENU, MainMenu, mnmn)\
 
-#define INIT_STATE(function) void Init_##function##State(void)
-#define UPDATE_STATE(function) StateIndex Update_##function##State(float deltaTime)
-#define DRAW_STATE(function) void Draw_##function##State(void)
-#define ESCAPE_STATE(function) int Escape_##function##State(StateIndex toState)
+#define INIT_STATE(function) void Init_##function##_(void)
+#define UPDATE_STATE(function) StateStatus *Update_##function##_(float deltaTime)
+#define DRAW_STATE(function) void Draw_##function##_(void)
+#define PAUSE_STATE(function) void Pause_##function##_(void)
+#define EXIT_STATE(function) void Exit_##function##_(void)
 
 #define STATE_DECLARATION(function) \
 	INIT_STATE(function);\
 	UPDATE_STATE(function);\
 	DRAW_STATE(function);\
-	ESCAPE_STATE(function);
+	PAUSE_STATE(function);\
+	EXIT_STATE(function);
 
 #define STATE_LIST_DECLARATION(function, string) \
-	{ Init_##function##State, \
-	Update_##function##State, \
-	Draw_##function##State, \
-	Escape_##function##State, \
+	{ Init_##function##_, \
+	Update_##function##_, \
+	Draw_##function##_, \
+	Pause_##function##_, \
+	Exit_##function##_, \
 	#string }
 
 typedef enum
 {
 	STATE_CONTINUE = 255,
-	STATE_BREAK = 254,
 	STATE_BASE = 0,
+
 	#define X(enum, function, string) enum,
 	GAME_STATES
 	#undef X
+
 	STATE_COUNT
 } StateIndex;
 
 typedef struct
 {
+	StateIndex state;
+	bool replace;
+	bool pop;
+} StateStatus;
+
+typedef struct
+{
 	void (*init)(void);
-	StateIndex (*update)(float);
+	StateStatus *(*update)(float);
 	void (*draw)(void);
-	int (*escape)(StateIndex);
+	void (*pause)(void);
+	void (*exit)(void);
 	char code[4];
 } States;
 

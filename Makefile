@@ -17,5 +17,5 @@ clean:
 debug:
 	@echo "Debug mode:"
 	@echo "Searching for errors..."
-	@$(CC) -DDEBUG $(SRC) -o d$(TARGET) -I $(INCLUDES) -L lib $(LIBS) 
+	@$(CC) $(LSRC) $(SRC) -o d$(TARGET) -I $(INCLUDES) -L lib $(LIBS) -g
 	@echo "d$(TARGET) created"
