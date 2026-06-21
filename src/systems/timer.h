@@ -50,5 +50,6 @@ void CountdownUpdate(Countdown *cd);
 float GetConstantFPS(void);
 Time *GetVirtualTime(void);
 meduint ExtractTime(float fsecs, smalluint measure);
+float LinearTween(char *name, float start, float end, float duration);
 
 #endif

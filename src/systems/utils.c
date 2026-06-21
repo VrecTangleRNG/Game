@@ -20,14 +20,22 @@ Trie *CreateTrie(void)
 void InsertTrie(Trie *root, char *strpath, void *valueptr)
 {
 	Trie *main = root;
-	for (int i = 0; i < strlen(strpath); i++)
+	for (size_t i = 0; i < strlen(strpath); i++)
 	{
-		int travPos = Hash(strpath[i]);
+		smalluint travPos = Hash(strpath[i]);
 		if (main->next[travPos] == NULL) main->next[travPos] = CreateTrie();
 		main = main->next[travPos];
 		if (!main) return;
 	}
 	main->valueptr = valueptr;
+}
+
+void *AllocateTrie(Trie *root, char *strpath, size_t size)
+{
+	void *space = malloc(size);
+	if (!space) return NULL;
+	InsertTrie(root, strpath, space);
+	return space;
 }
 
 void *SearchTrie(Trie *root, char *strpath)

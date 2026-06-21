@@ -8,6 +8,7 @@
 
 static float constantFPS = 0.0f;
 static Time virtualTime;
+static Trie *tweenTrie = NULL;
 /* --- ----------------------- --- */
 
 
@@ -34,7 +35,7 @@ void StopwatchStart(Stopwatch *sw)
 
 void StopwatchUpdate(Stopwatch *sw)
 {
-	if (sw->running) sw->elapsed = virtualTime.elapsed - sw->startTime;
+	if (sw->running) sw->elapsed += virtualTime.delta;
 }
 
 void CountdownStart(Countdown *cdwn, float duration)
@@ -96,5 +97,15 @@ meduint ExtractTime(float fsecs, smalluint measure)
 		default: break;
 	}
 	return scalar;
+}
+
+float LinearTween(char *name, float start, float end, float duration)
+{
+	if (!tweenTrie) tweenTrie = CreateTrie();
+	Stopwatch *currentStopwatch = SearchTrie(tweenTrie, name);
+	if (!currentStopwatch) currentStopwatch = AllocateTrie(tweenTrie, name, sizeof(Stopwatch));
+	StopwatchStart(currentStopwatch);
+	if (currentStopwatch->elapsed <= duration) StopwatchUpdate(currentStopwatch);
+	return Lerp(start, end, currentStopwatch->elapsed / duration);
 }
 /* --- ------- --- */

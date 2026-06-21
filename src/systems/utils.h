@@ -10,6 +10,7 @@
 #include <string.h>
 
 #include "raylib.h"
+#include "raymath.h"
 #include "box2d/box2d.h"
 
 #define TRIE_SIZE 36
@@ -32,11 +33,12 @@ typedef struct List
 
 // Data structures related functions
 	//Trie
-Trie *CreateTrie(void);
-void InsertTrie(Trie *root, char *strpath, void *valueptr);
-void *SearchTrie(Trie *root, char *strpath);
-void FreeTrie(Trie *root);
-int Hash(char c);
+Trie *CreateTrie(void);											// Returns trie root that extensible by InsertTrie()
+void InsertTrie(Trie *root, char *strpath, void *valueptr);		// Make a new branch to root and assign value valueptr
+void *AllocateTrie(Trie *root, char *strpath, size_t size);		// Similar to InsertTrie() but with valueptr assigned later by the user
+void *SearchTrie(Trie *root, char *strpath);					// Returns the value held by strpath, and NULL if not found
+void FreeTrie(Trie *root);										// Free a trie and its branches recursively
+int Hash(char c);												// Returns int; the index of c for trie insertion
 	// Linked list A.K.A Stack
 Stack *CreateStack(void);
 void Push(Stack **head, void *valueptr);
