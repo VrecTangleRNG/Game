@@ -3,35 +3,35 @@ static StateStatus status = { STATE_CONTINUE, false, false };
 
 
 // Initialize // Runs only once at directly before game loop
-INIT_STATE(Base)
+INIT_STATE(Splash)
 {
 	return;
 }
 
 
-// Update // Control the program flow with the return value
-UPDATE_STATE(Base)
+// Update // Control the program flow with the return value (has deltaTime)
+UPDATE_STATE(Splash)
 {
 	return &status;
 }
 
 
 // Pause // Do something in background
-PAUSE_STATE(Base)
+PAUSE_STATE(Splash)
 {
 	return;
 }
 
 
 // Draw // Generic draw function runs directly after update
-DRAW_STATE(Base)
+DRAW_STATE(Splash)
 {
 	return;
 }
 
 
 // Exit // Do clean ups before continue to the next state
-EXIT_STATE(Base)
+EXIT_STATE(Splash)
 {
 	return;
 }

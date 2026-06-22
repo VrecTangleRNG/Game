@@ -7,7 +7,7 @@
 #include "raylib.h"
 #include "cJSON/cJSON.h"
 
-#include "../systems/utils.h"
+#include "utils.h"
 
 typedef enum
 {

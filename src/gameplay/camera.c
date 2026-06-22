@@ -1,6 +1,6 @@
 /* --- User-defined header files --- */
 
-#include "camera.h"
+#include "../HEADERS/camera.h"
 /* --- ------------------------- --- */
 
 

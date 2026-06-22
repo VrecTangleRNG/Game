@@ -22,18 +22,19 @@
 #include "box2d/box2d.h"
 #include "cJSON/cJSON.h"
 
-#include "../gameplay/camera.h"
-#include "../gameplay/checkpoint.h"
-#include "../gameplay/level.h"
-#include "../gameplay/mapBuilder.h"
-#include "../gameplay/player.h"
-#include "../gameplay/ui.h"
-#include "../systems/physics.h"
-#include "../systems/timer.h"
-#include "../systems/utils.h"
+#include "camera.h"
+#include "checkpoint.h"
+#include "level.h"
+#include "mapBuilder.h"
+#include "player.h"
+#include "ui.h"
+#include "physics.h"
+#include "timer.h"
+#include "utils.h"
 
 // X(enum, function, tag)
-#define GAME_STATES
+#define GAME_STATES\
+	X(SPLASH_STATE, Splash, spls)
 
 #define INIT_STATE(function) void Init_##function##_(void)
 #define UPDATE_STATE(function) StateStatus *Update_##function##_(float deltaTime)

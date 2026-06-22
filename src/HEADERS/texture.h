@@ -9,7 +9,7 @@
 #include "raymath.h"
 #include "cJSON/cJSON.h"
 
-#include "../systems/utils.h"
+#include "utils.h"
 
 typedef struct
 {

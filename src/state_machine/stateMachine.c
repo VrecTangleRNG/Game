@@ -1,6 +1,6 @@
 /* --- User-defined header files --- */
 
-#include "stateMachine.h"
+#include "../HEADERS/stateMachine.h"
 /* --- ------------------------- --- */
 
 

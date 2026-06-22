@@ -6,8 +6,8 @@
 #include "raylib.h"
 #include "box2d/box2d.h"
 
-#include "../systems/physics.h"
-#include "../systems/utils.h"
+#include "physics.h"
+#include "utils.h"
 
 typedef enum
 {

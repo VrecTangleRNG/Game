@@ -1,6 +1,6 @@
 /* --- User-defined header files --- */
 
-#include "texture.h"
+#include "../HEADERS/texture.h"
 /* --- ------------------------- --- */
 
 
@@ -38,10 +38,10 @@ void LoadTextureSheet(const char *filename)
 	textureNames[loadedTextureCount - 1] = malloc(strlen(filename) * sizeof(char) + 1);
 	if (!textureNames[loadedTextureCount - 1]) printf("Failed to load texture name\n");
 	strcpy(textureNames[loadedTextureCount - 1], filename);
-	
+
 	// Allocate memory for textureDatas trie
 	if (!textureDatas) textureDatas = CreateTrie();
-	
+
 	// Process JSON from filename
 	char *jsonString = GetStringFromFile(TextFormat("assets/metadata/%s.json", filename));
 	cJSON *json = cJSON_Parse(jsonString);
@@ -49,7 +49,7 @@ void LoadTextureSheet(const char *filename)
 	cJSON *textureName = NULL;
 	int frameCount = cJSON_GetArraySize(frames);
 	loadedTileCount += frameCount;
-	
+
 	// Assign data to each entry of textureDatas array
 	cJSON_ArrayForEach(textureName, frames)
 	{
@@ -70,7 +70,7 @@ void LoadTextureSheet(const char *filename)
 		TruncateString(tempstr, -4);
 		InsertTrie(textureDatas, tempstr, (void *)texDatEach);
 	}
-	
+
 	// Free memories
 	free(jsonString);
 	cJSON_Delete(json);
