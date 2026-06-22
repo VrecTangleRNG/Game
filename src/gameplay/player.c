@@ -1,6 +1,6 @@
 /* --- User-defined header files --- */
 
-#include "../HEADERS/player.h"
+#include "player.h"
 /* --- ------------------------- --- */
 
 

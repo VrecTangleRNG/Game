@@ -1,6 +1,6 @@
 /* --- User-defined header files --- */
 
-#include "../HEADERS/stateMachine.h"
+#include "stateMachine.h"
 /* --- ------------------------- --- */
 
 
@@ -49,6 +49,9 @@ int RunStateStack(void)
 				((States *)(layer->valueptr))->pause();
 			}
 		}
+
+		// Check for exit condition
+		if (WindowShouldClose()) return 0;
 
 		// Draw
 		layer = NULL;

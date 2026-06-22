@@ -1,6 +1,6 @@
 /* --- User-defined header files --- */
 
-#include "../HEADERS/ui.h"
+#include "ui.h"
 /* --- ------------------------- --- */
 
 

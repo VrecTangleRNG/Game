@@ -22,15 +22,15 @@
 #include "box2d/box2d.h"
 #include "cJSON/cJSON.h"
 
-#include "../HEADERS/camera.h"
-#include "../HEADERS/checkpoint.h"
-#include "../HEADERS/level.h"
-#include "../HEADERS/mapBuilder.h"
-#include "../HEADERS/player.h"
-#include "../HEADERS/ui.h"
-#include "../HEADERS/physics.h"
-#include "../HEADERS/timer.h"
-#include "../HEADERS/utils.h"
+#include "../gameplay/camera.h"
+#include "../gameplay/checkpoint.h"
+#include "../gameplay/level.h"
+#include "../gameplay/mapBuilder.h"
+#include "../gameplay/player.h"
+#include "../gameplay/ui.h"
+#include "../systems/physics.h"
+#include "../systems/timer.h"
+#include "../systems/utils.h"
 
 // X(STATE_NAME, Function, idtf)
 #define GAME_STATES\

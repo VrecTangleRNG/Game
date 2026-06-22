@@ -1,6 +1,6 @@
 /* --- User-defined header files --- */
 
-#include "../HEADERS/texture.h"
+#include "texture.h"
 /* --- ------------------------- --- */
 
 

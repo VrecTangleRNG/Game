@@ -1,6 +1,6 @@
 /* --- Header files --- */
 
-#include "../HEADERS/physics.h"
+#include "physics.h"
 /* --- ------------------------- --- */
 
 

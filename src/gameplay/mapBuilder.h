@@ -11,9 +11,9 @@
 #include "cJSON/cJSON.h"
 
 #include "checkpoint.h"
-#include "texture.h"
-#include "physics.h"
-#include "utils.h"
+#include "../assets_manager/texture.h"
+#include "../systems/physics.h"
+#include "../systems/utils.h"
 //--------------------------//
 
 //		Tileset structs		//

@@ -8,9 +8,9 @@
 #include "raymath.h"
 #include "box2d/box2d.h"
 
-#include "texture.h"
-#include "physics.h"
-#include "utils.h"
+#include "../assets_manager/texture.h"
+#include "../systems/physics.h"
+#include "../systems/utils.h"
 
 typedef struct
 {

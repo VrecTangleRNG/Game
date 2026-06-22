@@ -1,6 +1,6 @@
 /* --- Header files --- */
 
-#include "../HEADERS/timer.h"
+#include "timer.h"
 /* --- ------------ --- */
 
 

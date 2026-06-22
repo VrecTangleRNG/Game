@@ -1,6 +1,6 @@
 /* --- Header files --- */
 
-#include "../HEADERS/level.h"
+#include "level.h"
 /* --- ------------ --- */
 
 

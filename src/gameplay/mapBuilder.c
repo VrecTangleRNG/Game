@@ -1,7 +1,7 @@
 /* --- header files --- */
 
 // TODO: i don't think mapBuilder should be in gameplay/ (or is it?)
-#include "../HEADERS/mapBuilder.h"
+#include "mapBuilder.h"
 /* --- ------------ --- */
 
 

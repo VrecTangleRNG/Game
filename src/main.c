@@ -12,8 +12,8 @@
 
 
 /* Complementary library */
-#include "HEADERS/stateMachine.h"
-#include "HEADERS/timer.h"
+#include "state_machine/stateMachine.h"
+#include "systems/timer.h"
 
 
 /* Preprocessors */

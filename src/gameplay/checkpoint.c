@@ -1,6 +1,6 @@
 /* --- User-defined header files --- */
 
-#include "../HEADERS/checkpoint.h"
+#include "checkpoint.h"
 /* --- ------------------------- --- */
 
 
