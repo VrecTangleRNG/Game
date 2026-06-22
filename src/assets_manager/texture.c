@@ -108,7 +108,7 @@ void FreeAllTextures(void)
 
 /* --- Methods --- */
 
-TextureData *GetTextureData(char *file)
+TextureData *GetSheetData(char *file)
 {
 	char tempstr[32];
 	strcpy(tempstr, file);

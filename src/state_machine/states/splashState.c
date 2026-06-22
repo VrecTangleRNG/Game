@@ -1,5 +1,7 @@
-#include "../../HEADERS/stateList.h"
+#include "../stateList.h"
 static StateStatus status = { STATE_CONTINUE, false, false };
+
+static float fade;
 
 
 // Initialize // Runs only once at directly before game loop
@@ -12,6 +14,16 @@ INIT_STATE(Splash)
 // Update // Control the program flow with the return value (has deltaTime)
 UPDATE_STATE(Splash)
 {
+	static Stopwatch sw;
+	StopwatchStart(&sw);
+	StopwatchUpdate(&sw);
+	if (sw.elapsed < 3.0f) fade = LinearTween("in", .0f, 255.0f, .5f);
+	else fade = LinearTween("out", 255.0f, .0f, .5f);
+	if (sw.elapsed > 4.0f)
+	{
+		status.state = STATE_WELCOME;
+		status.replace = true;
+	}
 	return &status;
 }
 
@@ -26,6 +38,8 @@ PAUSE_STATE(Splash)
 // Draw // Generic draw function runs directly after update
 DRAW_STATE(Splash)
 {
+	ClearBackground(WHITE);
+	DrawText("splash Art 1", 10, 10, 30, (Color){ 0, 0, 0, fade });
 	return;
 }
 
@@ -33,5 +47,5 @@ DRAW_STATE(Splash)
 // Exit // Do clean ups before continue to the next state
 EXIT_STATE(Splash)
 {
-	return;
+	CleanTimeStorage();
 }

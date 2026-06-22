@@ -41,7 +41,7 @@ typedef enum
 
 
 // Core time functions
-void SetupGameTime(const float targetFPS, const float scale);
+void SetupGameTime(const float targetFPS, const float scale);			// Set FPS and virtual time scale, runs once at program interface
 void UpdateGameTime(void);
 float GetConstantFPS(void);
 Time *GetVirtualTime(void);

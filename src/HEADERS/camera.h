@@ -3,8 +3,8 @@
 
 #include "raylib.h"
 
-void SetupCamera(void);
-void SetCameraPos(Vector2 *v);
-Camera2D GetCamera(void);
+void SetupCamera(void);         // Runs only once to initialize camera
+void SetCameraPos(Vector2 *v);  // Set where the camera should be focused in fixed coordinates
+Camera2D GetCamera(void);       // Get camera informations
 
 #endif

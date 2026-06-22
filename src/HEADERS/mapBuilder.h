@@ -70,15 +70,13 @@ typedef struct
 	b2Vec2 pos;
 } Spawnpoint;
 
-// Main functions
+
 /* NOTE: can only load one tilemap as the program running */
 void LoadMap(char *tilemapFile);
 void PlaceObjects(void);
 void DrawMap(void);
 void FreeMapDatas(void);
 void DestroyMapBodies(void);
-
-// Utility functions
 int GetTilesetIndex(int gid);
 Spawnpoint GetSpawnpoint(int spawnId);
 

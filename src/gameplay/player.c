@@ -44,7 +44,7 @@ void InitPlayer(b2Vec2 initPos, float initAngle)
 
 	// Loading car texture and its information
 	strcpy(car.textureFile, "car1.png");
-	car.textureData = GetTextureData(car.textureFile);
+	car.textureData = GetSheetData(car.textureFile);
 	carExtent.x = car.textureData->rect.width * 0.5f;
 	carExtent.y = car.textureData->rect.height * 0.5f;
 

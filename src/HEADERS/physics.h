@@ -13,11 +13,10 @@
 
 // Main functions
 // NOTE: Call CheckSensorCollision after calling UpdatePhysics in a loop
-void InitPhysics(void);
-void UpdatePhysics(float timeStep, float deltaTime);
-b2ShapeId *CheckSensorCollision(b2ShapeId *targetShape, b2ShapeId *sensorShape, int check);// "check" = 1 will return entered shape id, vice versa for -1
-
-// Utility functions
-b2WorldId GetWorldId(void);
+void InitPhysics(void);                                         // Create a world for physics objects to live upon, runs only once
+void UpdatePhysics(float timeStep, float deltaTime);            // Similar to generic update function in state machine
+b2ShapeId *CheckSensorCollision
+(b2ShapeId *targetShape, b2ShapeId *sensorShape, int check);    // "check" = 1 will return entered shape id, vice versa for -1
+b2WorldId GetWorldId(void);                                     // Get world id
 
 #endif

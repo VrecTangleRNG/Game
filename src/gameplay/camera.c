@@ -23,7 +23,7 @@ void SetupCamera(void)
 	camera.zoom = 1.0f;
 }
 
-void SetCameraPos(Vector2 *v)
+inline void SetCameraPos(Vector2 *v)
 {
 	camera.target = *v;
 }

@@ -49,7 +49,7 @@ int IntPower(int base, int exp);
 int ExtractNumerics(char *string);
 
 // String related function
-void TruncateString(char *string, signed int cut);				// Cut string from index "cut"
+void TruncateString(char *string, signed int cut);				// Cut string from index (cut)
 
 // Vector related utilities
 Vector2 B2vecToRlvec(b2Vec2 v);

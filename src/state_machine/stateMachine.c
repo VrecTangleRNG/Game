@@ -16,7 +16,7 @@ static Stack *stateStack = NULL;
 
 int RunStateStack(void)
 {
-	currentState = stateList + upcomingStateStat.state;
+	currentState = (States *)(stateList + upcomingStateStat.state);
 
 	// Determine whether the stateStack is empty or already filled (if so, Push)
 	if (!stateStack)

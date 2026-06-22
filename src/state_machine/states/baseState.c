@@ -1,4 +1,4 @@
-#include "../../HEADERS/stateList.h"
+#include "../stateList.h"
 static StateStatus status = { STATE_CONTINUE, false, false };
 
 
@@ -12,6 +12,8 @@ INIT_STATE(Base)
 // Update // Control the program flow with the return value
 UPDATE_STATE(Base)
 {
+	status.state = STATE_SPLASH;
+	status.replace = true;
 	return &status;
 }
 

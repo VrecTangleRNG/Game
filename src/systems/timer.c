@@ -108,7 +108,8 @@ float LinearTween(char *name, float start, float end, float duration)
 	StopwatchStart(currentStopwatch);
 	if (currentStopwatch->elapsed <= duration) StopwatchUpdate(currentStopwatch);
 	float value = Lerp(start, end, currentStopwatch->elapsed / duration);
-	return (value >= end) ? end : value;
+	// What the heck
+	return (start < end) ? ((value >= end) ? end : value) : ((value <= end) ? end : value);
 }
 
 void CleanTimeStorage(void)
