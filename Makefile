@@ -15,7 +15,7 @@ clean:
 	@echo "All output files has been cleared"
 
 debug:
-	@echo "Debug mode:"
+	@echo "Debug mode: run with gdb"
 	@echo "Searching for errors..."
 	@$(CC) $(LSRC) $(SRC) -o d$(TARGET) -I $(INCLUDES) -L lib $(LIBS) -g
 	@echo "d$(TARGET) created"

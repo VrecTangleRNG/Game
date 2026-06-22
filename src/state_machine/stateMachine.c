@@ -53,11 +53,7 @@ int RunStateStack(void)
 		// Draw
 		layer = NULL;
 		BeginDrawing();
-		StackForEach(layer, stateStack)
-		{
-			ClearBackground(GRAY);
-			((States *)(layer->valueptr))->draw();
-		}
+		StackForEach(layer, stateStack) ((States *)(layer->valueptr))->draw();
 		EndDrawing();
 
 		// If none of this was run, continue the loop

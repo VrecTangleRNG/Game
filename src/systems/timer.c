@@ -19,6 +19,7 @@ void SetupGameTime(const float targetFPS, const float scale)
 	SetTargetFPS(targetFPS);
 	constantFPS = targetFPS;
 	virtualTime.scale = scale;
+	if (!timerStorage) timerStorage = CreateTrie();
 }
 
 void UpdateGameTime(void)
@@ -58,10 +59,6 @@ void CountdownUpdate(Countdown *cdwn)
 		cdwn->remaining = 0.0f;
 	}
 }
-/* --- ------------ --- */
-
-
-/* --- Methods --- */
 
 float GetConstantFPS(void)
 {
@@ -73,7 +70,7 @@ Time *GetVirtualTime(void)
 	return &virtualTime;
 }
 
-meduint ExtractTime(float fsecs, smalluint measure)
+meduint ExtractTime(float fsecs, TimeMeasurement measure)
 {
 	meduint scalar = 0;
 	switch (measure)
@@ -101,15 +98,21 @@ meduint ExtractTime(float fsecs, smalluint measure)
 
 float LinearTween(char *name, float start, float end, float duration)
 {
-	if (!timerStorage) timerStorage = CreateTrie();
 	Stopwatch *currentStopwatch = (Stopwatch *)SearchTrie(timerStorage, name);
 	if (!currentStopwatch)
 	{
 		currentStopwatch = calloc(1, sizeof(Stopwatch));
+		if (!currentStopwatch) {printf("Unable to create space\n"); return .0f;}
 		InsertTrie(timerStorage, name, currentStopwatch);
 	}
 	StopwatchStart(currentStopwatch);
 	if (currentStopwatch->elapsed <= duration) StopwatchUpdate(currentStopwatch);
-	return Lerp(start, end, currentStopwatch->elapsed / duration) - 0.9f;
+	float value = Lerp(start, end, currentStopwatch->elapsed / duration);
+	return (value >= end) ? end : value;
 }
-/* --- ------- --- */
+
+void CleanTimeStorage(void)
+{
+	FreeTrie(timerStorage);
+}
+/* --- ------------ --- */

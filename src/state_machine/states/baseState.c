@@ -26,7 +26,7 @@ PAUSE_STATE(Base)
 // Draw // Generic draw function runs directly after update
 DRAW_STATE(Base)
 {
-	DrawText ("Hello, world!", 10, GetScreenHeight() * .5f, 30, (Color){ 0, 0, 0, LinearTween("fade", .0f, 255.0f, 2.0f) });
+	return;
 }
 
 

@@ -9,6 +9,7 @@
 /*
  * -> Looks definition for GAME_STATES
  * -> Adds your state there by providing X(enum, function, string)
+ * -> Run this command in terminal: cp templates.txt src/state_machine/states/<nameState>.c
  */
 
 #ifndef STATE_LIST_H
@@ -33,7 +34,6 @@
 
 // X(enum, function, tag)
 #define GAME_STATES
-//	X(STATE_MAIN_MENU, MainMenu, mnmn)\
 
 #define INIT_STATE(function) void Init_##function##_(void)
 #define UPDATE_STATE(function) StateStatus *Update_##function##_(float deltaTime)
