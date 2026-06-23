@@ -14,12 +14,10 @@ INIT_STATE(Splash)
 // Update // Control the program flow with the return value (has deltaTime)
 UPDATE_STATE(Splash)
 {
-	static Stopwatch sw;
-	StopwatchStart(&sw);
-	StopwatchUpdate(&sw);
-	if (sw.elapsed < 3.0f) fade = LinearTween("in", .0f, 255.0f, .5f);
-	else fade = LinearTween("out", 255.0f, .0f, .5f);
-	if (sw.elapsed > 4.0f)
+	Stopwatch *sw = RunStopwatch("splash", true);
+	if (sw->elapsed < 3.0f) fade = LinearTween("in", .0f, 255.0f, .5f, true);
+	else fade = LinearTween("out", 255.0f, .0f, .5f, true);
+	if (sw->elapsed > 4.0f)
 	{
 		status.state = STATE_WELCOME;
 		status.replace = true;

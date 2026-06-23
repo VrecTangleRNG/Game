@@ -14,7 +14,7 @@ static Trie *timerStorage = NULL;
 
 /* --- Main methods --- */
 
-void SetupGameTime(const float targetFPS, const float scale)
+void TimerInit(const float targetFPS, const float scale)
 {
 	SetTargetFPS(targetFPS);
 	constantFPS = targetFPS;
@@ -28,36 +28,51 @@ void UpdateGameTime(void)
 	virtualTime.elapsed += virtualTime.delta;
 }
 
-void StopwatchStart(Stopwatch *sw)
+// TODO: timing concern, idk what to do about it
+Stopwatch *RunStopwatch(char *strpath, bool relative)
 {
-	sw->startTime = virtualTime.elapsed;
-	sw->running = true;
-}
-
-void StopwatchUpdate(Stopwatch *sw)
-{
-	if (sw->running) sw->elapsed += virtualTime.delta;
-}
-
-void CountdownStart(Countdown *cdwn, float duration)
-{
-	cdwn->duration = duration;
-	cdwn->remaining = cdwn->duration;
-	cdwn->started = true;
-	cdwn->finished = false;
-}
-
-void CountdownUpdate(Countdown *cdwn)
-{
-	if (cdwn->started && !cdwn->finished)
+	Stopwatch *buffer = (Stopwatch *)SearchTrie(timerStorage, strpath);
+	if (!buffer)
 	{
-		cdwn->remaining -= virtualTime.delta;
+		buffer = calloc(1, sizeof(Stopwatch));
+		if (!buffer) {printf("Unable to create space\n"); return NULL;}
+		InsertTrie(timerStorage, strpath, buffer);
 	}
-	if (cdwn->remaining <= 0.0f)
+	if (!buffer->running)
 	{
-		cdwn->finished = true;
-		cdwn->remaining = 0.0f;
+		buffer->running = true;
+		buffer->startTime = (relative) ? GetTime() : virtualTime.elapsed;
 	}
+	if (buffer->running) buffer->elapsed += (relative) ? GetFrameTime() : virtualTime.delta;
+	return buffer;
+}
+
+Countdown *RunCountdown(char *strpath, float duration, bool relative)
+{
+	Countdown *buffer = (Countdown *)SearchTrie(timerStorage, strpath);
+	if (!buffer)
+	{
+		buffer = calloc(1, sizeof(Countdown));
+		if (!buffer) {printf("Unable to create space\n"); return NULL;}
+		InsertTrie(timerStorage, strpath, buffer);
+	}
+	// TODO: holy ifs
+	if (!buffer->started && !buffer->finished)
+	{
+		buffer->duration = duration;
+		buffer->remaining = duration;
+		buffer->started = true;
+	}
+	if (buffer->started && !buffer->finished)
+	{
+		buffer->remaining -= (relative) ? GetFrameTime() : virtualTime.delta;
+		if (buffer->remaining <= .0f)
+		{
+			buffer->finished = true;
+			buffer->remaining = .0f;
+		}
+	}
+	return buffer;
 }
 
 float GetConstantFPS(void)
@@ -96,20 +111,12 @@ meduint ExtractTime(float fsecs, TimeMeasurement measure)
 	return scalar;
 }
 
-float LinearTween(char *name, float start, float end, float duration)
+float LinearTween(char *strpath, float start, float end, float duration, bool relative)
 {
-	Stopwatch *currentStopwatch = (Stopwatch *)SearchTrie(timerStorage, name);
-	if (!currentStopwatch)
-	{
-		currentStopwatch = calloc(1, sizeof(Stopwatch));
-		if (!currentStopwatch) {printf("Unable to create space\n"); return .0f;}
-		InsertTrie(timerStorage, name, currentStopwatch);
-	}
-	StopwatchStart(currentStopwatch);
-	if (currentStopwatch->elapsed <= duration) StopwatchUpdate(currentStopwatch);
-	float value = Lerp(start, end, currentStopwatch->elapsed / duration);
-	// What the heck
+	Countdown *cd = RunCountdown(strpath, duration, relative);
+	float value = Lerp(start, end, (duration - cd->remaining) / duration);
 	return (start < end) ? ((value >= end) ? end : value) : ((value <= end) ? end : value);
+	// What the heck the above code doin lmao
 }
 
 void CleanTimeStorage(void)

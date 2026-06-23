@@ -40,23 +40,14 @@ typedef enum
 } TimeMeasurement;
 
 
-// Core time functions
-void SetupGameTime(const float targetFPS, const float scale);			// Set FPS and virtual time scale, runs once at program interface
+void TimerInit(const float targetFPS, const float scale);			// Set FPS and virtual time scale, runs once at program interface
 void UpdateGameTime(void);
 float GetConstantFPS(void);
 Time *GetVirtualTime(void);
 meduint ExtractTime(float fsecs, TimeMeasurement measure);
 void CleanTimeStorage(void);
-
-// Stopwatch
-void StopwatchStart(Stopwatch *sw);
-void StopwatchUpdate(Stopwatch *sw);
-
-// Countdown
-void CountdownStart(Countdown *cd, float duration);
-void CountdownUpdate(Countdown *cd);
-
-// Tweens
-float LinearTween(char *name, float start, float end, float duration);
+Stopwatch *RunStopwatch(char *strpath, bool relative);
+Countdown *RunCountdown(char *strpath, float duration, bool relative);
+float LinearTween(char *strpath, float start, float end, float duration, bool relative);
 
 #endif
