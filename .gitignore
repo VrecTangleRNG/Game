@@ -1,3 +1,4 @@
 *.exe
 templates.txt
 assets/
+build/
