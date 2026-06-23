@@ -35,7 +35,8 @@
 // X(STATE_NAME, Function, idtf)
 #define GAME_STATES\
 	X(STATE_SPLASH, Splash, spls)\
-	X(STATE_WELCOME, Welcome, wlcm)
+	X(STATE_WELCOME, Welcome, wlcm)\
+	X(STATE_MAIN_MENU, MainMenu, mnmn)
 
 #define INIT_STATE(function) void Init_##function##_(void)
 #define UPDATE_STATE(function) StateStatus *Update_##function##_(float deltaTime)
