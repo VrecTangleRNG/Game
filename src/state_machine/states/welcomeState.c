@@ -18,7 +18,7 @@ UPDATE_STATE(Welcome)
 {
 	// NOTE: might overflow that leads to undef behaviour
 	Stopwatch *sw = RunStopwatch("wlcm", true);
-	transparency = ((meduint)(sw->elapsed) % 2) ? 255 : 0;
+	transparency = ((uint2)(sw->elapsed) % 2) ? 255 : 0;
 	if (IsKeyPressed(KEY_SPACE))
 	{
 		status.state = STATE_MAIN_MENU;
@@ -38,6 +38,7 @@ PAUSE_STATE(Welcome)
 // Draw // Generic draw function runs directly after update
 DRAW_STATE(Welcome)
 {
+	ClearBackground(GRAY);
 	DrawText("Welcome to the game!", 40, GetScreenHeight() * .4f - 40, 40, BLACK);
 	DrawText("Press SPACE to continue", 40, GetScreenHeight() * .75f - 25, 25, (Color){ 0, 0, 0, transparency });
 }
@@ -46,5 +47,5 @@ DRAW_STATE(Welcome)
 // Exit // Do clean ups before continue to the next state
 EXIT_STATE(Welcome)
 {
-	CleanTimeStorage();
+	return;
 }

@@ -22,7 +22,7 @@ void InsertTrie(Trie *root, char *strpath, void *valueptr)
 	Trie *main = root;
 	for (size_t i = 0; i < strlen(strpath); i++)
 	{
-		smalluint travPos = Hash(strpath[i]);
+		uint1 travPos = Hash(strpath[i]);
 		if (main->next[travPos] == NULL) main->next[travPos] = CreateTrie();
 		main = main->next[travPos];
 		if (!main) return;

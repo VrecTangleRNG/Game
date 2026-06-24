@@ -15,8 +15,12 @@
 
 #define TRIE_SIZE 36
 
-#define smalluint uint8_t
-#define meduint uint16_t
+#define int1 int8_t
+#define int2 int16_t
+#define int4 int32_t
+#define uint1 uint8_t
+#define uint2 uint16_t
+#define uint4 uint32_t
 
 typedef struct Node
 {

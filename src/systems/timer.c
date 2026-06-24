@@ -85,25 +85,25 @@ Time *GetVirtualTime(void)
 	return &virtualTime;
 }
 
-meduint ExtractTime(float fsecs, TimeMeasurement measure)
+uint2 ExtractTime(float fsecs, TimeMeasurement measure)
 {
-	meduint scalar = 0;
+	uint2 scalar = 0;
 	switch (measure)
 	{
 		case MSECONDS:
-			scalar = ((meduint)(fsecs * 1000) % 1000);
+			scalar = ((uint2)(fsecs * 1000) % 1000);
 			break;
 
 		case SECONDS:
-			scalar = (meduint)fsecs % 60;
+			scalar = (uint2)fsecs % 60;
 			break;
 
 		case MINUTES:
-			scalar = (meduint)(fsecs / 60.0f) % 60;
+			scalar = (uint2)(fsecs / 60.0f) % 60;
 			break;
 
 		case HOURS:
-			scalar = (meduint)(fsecs / 3600.0f) % 24;
+			scalar = (uint2)(fsecs / 3600.0f) % 24;
 			break;
 
 		default: break;

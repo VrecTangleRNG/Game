@@ -55,7 +55,6 @@ int RunStateStack(void)
 		BeginDrawing();
 		StackForEach(layer, stateStack)
 		{
-			ClearBackground(GRAY);
 			((States *)(layer->valueptr))->draw();
 		}
 		EndDrawing();

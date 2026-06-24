@@ -8,7 +8,7 @@
 
 static Level *runningLevel = NULL;
 static Level *levels = NULL;    // TODO: not yet freed
-static meduint levelCount = 0;
+static uint2 levelCount = 0;
 /* --- ----------------------- --- */
 
 
@@ -34,7 +34,7 @@ void LoadCurrentLevel(char *tilemapFile, char *levelFile)
         {
             cJSON *levelsJSON = cJSON_GetObjectItem(world, "levels");
             cJSON *level = NULL;
-            meduint levelCount = cJSON_GetArraySize(levelsJSON);
+            uint2 levelCount = cJSON_GetArraySize(levelsJSON);
 
             // Allocate memory for levels container
             if (!levels) levels = malloc(sizeof(Level));

@@ -21,15 +21,15 @@ typedef struct
     RaceGameMode mode;
     float angle;
     char name[20];
-    meduint spawnpointId;
-    meduint *checkpointIds; // TODO: fix this member allocation type later
-    meduint cpIdCount;
+    uint2 spawnpointId;
+    uint2 *checkpointIds; // TODO: fix this member allocation type later
+    uint2 cpIdCount;
 } Level;
 
 typedef struct
 {
-    smalluint currentLap;
-    smalluint currentCp;
+    uint1 currentLap;
+    uint1 currentCp;
 } LapTracker;
 
 // Global gamemode module

@@ -9,7 +9,7 @@ typedef enum
 	MENU_COUNT
 } Menus;
 
-static smalluint selection = 0;
+static uint1 selection = 0;
 
 
 // Initialize // Runs only once at directly before game loop
@@ -22,9 +22,30 @@ INIT_STATE(MainMenu)
 // Update // Control the program flow with the return value (has deltaTime)
 UPDATE_STATE(MainMenu)
 {
-	smalluint input = IsKeyPressed(KEY_DOWN) - IsKeyPressed(KEY_UP);
+	// Get player input
+	uint1 input = IsKeyPressed(KEY_DOWN) - IsKeyPressed(KEY_UP);
+
+	// Cycle through menu
 	selection += input;
-	selection = abs(selection) % MENU_COUNT;
+	selection = (selection == 255) ? MENU_COUNT - 1 : selection % MENU_COUNT;
+
+	// Send signal to machine on player pressed enter key
+	if (IsKeyPressed(KEY_ENTER))
+	{
+		switch (selection)
+		{
+			case PLAY:
+				status.state = STATE_CIRCUIT;
+				status.replace = true;
+				break;
+
+			case CAR_SELECT:
+				break;
+
+			case QUIT:
+				break;
+		}
+	}
 	return &status;
 }
 
@@ -39,6 +60,7 @@ PAUSE_STATE(MainMenu)
 // Draw // Generic draw function runs directly after update
 DRAW_STATE(MainMenu)
 {
+	ClearBackground(GRAY);
 	DrawText(TextFormat("%sPlay", (selection == PLAY) ? ">> " : ""), 20, 30, 30, BLACK);
 	DrawText(TextFormat("%sCar Select", (selection == CAR_SELECT) ? ">> " : ""), 20, 70, 30, BLACK);
 	DrawText(TextFormat("%sQuit", (selection == QUIT) ? ">> " : ""), 20, 110, 30, BLACK);

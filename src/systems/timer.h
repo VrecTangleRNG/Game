@@ -44,7 +44,7 @@ void TimerInit(const float targetFPS, const float scale);			// Set FPS and virtu
 void UpdateGameTime(void);
 float GetConstantFPS(void);
 Time *GetVirtualTime(void);
-meduint ExtractTime(float fsecs, TimeMeasurement measure);
+uint2 ExtractTime(float fsecs, TimeMeasurement measure);
 void CleanTimeStorage(void);
 Stopwatch *RunStopwatch(char *strpath, bool relative);
 Countdown *RunCountdown(char *strpath, float duration, bool relative);
