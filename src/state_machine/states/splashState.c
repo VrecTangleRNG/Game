@@ -15,9 +15,9 @@ INIT_STATE(Splash)
 UPDATE_STATE(Splash)
 {
 	Stopwatch *sw = RunStopwatch("splash", true);
-	if (sw->elapsed < 3.0f) fade = LinearTween("in", .0f, 255.0f, .5f, true);
+	if (sw->elapsed < 2.0f) fade = LinearTween("in", .0f, 255.0f, .5f, true);
 	else fade = LinearTween("out", 255.0f, .0f, .5f, true);
-	if (sw->elapsed > 4.0f)
+	if (sw->elapsed > 2.6f)
 	{
 		status.state = STATE_WELCOME;
 		status.replace = true;
@@ -38,7 +38,6 @@ DRAW_STATE(Splash)
 {
 	ClearBackground(WHITE);
 	DrawText("splash Art 1", 10, 10, 30, (Color){ 0, 0, 0, fade });
-	return;
 }
 
 

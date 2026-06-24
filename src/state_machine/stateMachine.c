@@ -50,14 +50,18 @@ int RunStateStack(void)
 			}
 		}
 
-		// Check for exit condition
-		if (WindowShouldClose()) return 0;
-
 		// Draw
 		layer = NULL;
 		BeginDrawing();
-		StackForEach(layer, stateStack) ((States *)(layer->valueptr))->draw();
+		StackForEach(layer, stateStack)
+		{
+			ClearBackground(GRAY);
+			((States *)(layer->valueptr))->draw();
+		}
 		EndDrawing();
+
+		// Check for exit condition
+		if (WindowShouldClose()) return 0;
 
 		// If none of this was run, continue the loop
 		// TODO: this was unoptimized
