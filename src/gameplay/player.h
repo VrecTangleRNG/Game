@@ -22,12 +22,11 @@ typedef struct
 
 // Main function declarations
 void InitPlayer(b2Vec2 initPos, float initAngle);	// Initialize player
-void UpdatePlayer(float deltaTime);					// Do something to player
+void UpdatePlayer(float deltaTime);					// Update player
 void DrawPlayer(void);								// Draw player to screen
-
-// Method declarations
+void SetPlayerControl(bool isHeld);					// Set  player control so car can't be controlled by player ((isHeld) = false)
 Vector2 GetCenterPlayerPos(void);					// Get center position of player
 Vector2 GetEdgePlayerPos(void);						// Get raylib-based position of player
-b2ShapeId *GetPlayerShape(void);
+b2ShapeId *GetPlayerShape(void);					// Get hitbox shape of player
 
 #endif

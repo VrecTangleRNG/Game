@@ -48,7 +48,7 @@
 #define INIT_STATE(function) void Init_##function##_(void)
 #define UPDATE_STATE(function) StateStatus *Update_##function##_(float deltaTime)
 #define DRAW_STATE(function) void Draw_##function##_(void)
-#define PAUSE_STATE(function) void Pause_##function##_(void)
+#define PAUSE_STATE(function) void Pause_##function##_(float deltaTime)
 #define EXIT_STATE(function) void Exit_##function##_(void)
 
 #define STATE_DECLARATION(function) \
@@ -90,7 +90,7 @@ typedef struct
 	void (*init)(void);
 	StateStatus *(*update)(float);
 	void (*draw)(void);
-	void (*pause)(void);
+	void (*pause)(float);
 	void (*exit)(void);
 	char code[4];
 } States;

@@ -24,8 +24,9 @@ static Car car = { 0 };
 static b2Vec2 carExtent;
 static b2Vec2 carPosCenter, carPosEdge;
 static TextureData *carTextureData;
-static float carAngle = 0.0f, tireAngle = 0.0f;
+static float carAngle = .0f, tireAngle = .0f;
 static float carRad;
+static uint1 playerControl = 1;
 /* --- ----------------------- --- */
 
 
@@ -71,13 +72,15 @@ void InitPlayer(b2Vec2 initPos, float initAngle)
 		(b2Vec2){ -carExtent.x , -carExtent.y }
 	);
 	carAngle = RAD2DEG * b2Rot_GetAngle(b2Body_GetRotation(car.bodyId));
-}
 
+	// Set initial car state
+	playerControl = 1;
+}
 
 void UpdatePlayer(float deltaTime)
 {
 	// Control movement and rotation based on player input
-	int gasPad = IsKeyDown(KEY_LEFT) - IsKeyDown(KEY_UP);
+	int gasPad = (IsKeyDown(KEY_LEFT) - IsKeyDown(KEY_UP)) * playerControl;
 	int steerPad = IsKeyDown(KEY_D) - IsKeyDown(KEY_A);
 
 	// Change the steering angle based on player input
@@ -115,7 +118,7 @@ void UpdatePlayer(float deltaTime)
 	}
 
 	// Set where the rear forces is acting
-	Vector2 forceMagnitude = { F_ENGINE * gasPad * .5f, 0.0f };
+	Vector2 forceMagnitude = { F_ENGINE * (float)gasPad * .5f, 0.0f };
 	Vector2 rearForceMagnitude = Vector2Rotate(forceMagnitude, carRad);
 	Vector2 rearForcePoint = { carExtent.x, 0.0f };
 	rearForcePoint = Vector2Rotate(rearForcePoint, carRad);
@@ -174,7 +177,6 @@ void UpdatePlayer(float deltaTime)
 	carAngle = RAD2DEG * b2Rot_GetAngle(b2Body_GetRotation(car.bodyId));
 }
 
-
 void DrawPlayer(void)
 {
 	// Draw the main car body
@@ -195,6 +197,11 @@ void DrawPlayer(void)
 
 
 /* --- Methods --- */
+
+inline void SetPlayerControl(bool isHeld)
+{
+	playerControl = isHeld;
+}
 
 Vector2 GetCenterPlayerPos(void)
 {

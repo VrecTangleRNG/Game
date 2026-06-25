@@ -46,7 +46,7 @@ int RunStateStack(void)
 			}
 			else
 			{
-				((States *)(layer->valueptr))->pause();
+				((States *)(layer->valueptr))->pause(GetVirtualTime()->delta);
 			}
 		}
 

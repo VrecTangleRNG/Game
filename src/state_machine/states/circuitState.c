@@ -51,6 +51,7 @@ UPDATE_STATE(Circuit)
 	else status.state = STATE_CONTINUE;
 
 	// Start lap timer
+	SetPlayerControl(true);							// TODO: refactor this so the function can overide car control
 	playerLapTimer = RunStopwatch("plyr", false);
 
 	// Update player
@@ -71,10 +72,12 @@ UPDATE_STATE(Circuit)
 }
 
 
-// Pause // Do something in background
+// Pause // Do something in background (also has deltaTime)
 PAUSE_STATE(Circuit)
 {
-	return;
+	SetPlayerControl(false);							// TODO: refactor this so the function can overide car control
+	UpdatePlayer(deltaTime);
+	UpdatePhysics(1.0f / GetConstantFPS(), deltaTime);
 }
 
 
