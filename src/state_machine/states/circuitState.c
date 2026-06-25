@@ -64,10 +64,9 @@ UPDATE_STATE(Circuit)
 	// Set progress that the player has made
 	RunLapTracker(&playerLap, GetRunningLevel(), GetPlayerShape());
 
-	if (playerLap.currentLap > 3)
-	{
-		status.state = STATE_FINISHED;
-	}
+	// Control state flow
+	if (playerLap.currentLap > 3)	status.state = STATE_FINISHED;
+	if (PauseInput()) 				status.state = STATE_PAUSED;
 	return &status;
 }
 

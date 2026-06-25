@@ -26,6 +26,7 @@
 int main(void)
 {
 	InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Racing Game");
+	SetExitKey(KEY_NULL);
 	TimerInit(FPS, 1.0f);
 	while (RunStateStack());	// CRITICAL POINT IMMINENT
 	CloseWindow();

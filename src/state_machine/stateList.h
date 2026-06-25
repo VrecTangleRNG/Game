@@ -29,6 +29,7 @@
 #include "../gameplay/mapBuilder.h"
 #include "../gameplay/player.h"
 #include "../gameplay/ui.h"
+#include "../systems/input.h"
 #include "../systems/physics.h"
 #include "../systems/timer.h"
 #include "../systems/utils.h"
@@ -41,7 +42,8 @@
 	X(STATE_CIRCUIT, Circuit, crct)\
 	X(STATE_GET_READY, GetReady, gtrd)		/* Gatorade */\
 	X(STATE_COUNTDOWN, Countdown, cndn)\
-	X(STATE_FINISHED, Finished, fnsd)
+	X(STATE_FINISHED, Finished, fnsd)\
+	X(STATE_PAUSED, Paused, pasd)
 
 #define INIT_STATE(function) void Init_##function##_(void)
 #define UPDATE_STATE(function) StateStatus *Update_##function##_(float deltaTime)

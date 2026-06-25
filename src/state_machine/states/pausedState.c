@@ -1,50 +1,46 @@
 #include "../stateList.h"
 static StateStatus status = { STATE_CONTINUE, false, false };
 
-static char blink = 0;
-
 
 // Initialize // Runs only once at directly before game loop
-INIT_STATE(GetReady)
+INIT_STATE(Paused)
 {
+	status.state = STATE_CONTINUE;
+	status.pop = false;
 	return;
 }
 
 
 // Update // Control the program flow with the return value (has deltaTime)
-UPDATE_STATE(GetReady)
+UPDATE_STATE(Paused)
 {
-	blink = ((char)(RunStopwatch("blnk", true)->elapsed * 1.75f) % 2) ? 0 : 255;
 	if (EnterInput())
 	{
-		status.state = STATE_COUNTDOWN;
-		status.replace = true;
+		status.state = STATE_CIRCUIT;
+		status.pop = true;
 	}
 	return &status;
 }
 
 
 // Pause // Do something in background
-PAUSE_STATE(GetReady)
+PAUSE_STATE(Paused)
 {
 	return;
 }
 
 
 // Draw // Generic draw function runs directly after update
-DRAW_STATE(GetReady)
+DRAW_STATE(Paused)
 {
-	DrawText
-	(
-		"Click to start", GetScreenWidth() * .25f, GetScreenHeight() * .75f,
-		30, (Color){ 0, 0, 0, blink }
-	);
+	DrawText("PAUSED", 20, GetScreenHeight() * .5f - 25, 50, BLACK);
+	DrawText("Click ENTER/SPACE to Resume", 20, GetScreenHeight() * .5f + 15, 30, BLACK);
 	return;
 }
 
 
 // Exit // Do clean ups before continue to the next state
-EXIT_STATE(GetReady)
+EXIT_STATE(Paused)
 {
 	return;
 }

@@ -1,7 +1,7 @@
-/* --- User-defined header files --- */
+/* --- Header files --- */
 
 #include "utils.h"
-/* --- ------------------------- --- */
+/* --- ------------ --- */
 
 /* --- Main methods --- */
 
