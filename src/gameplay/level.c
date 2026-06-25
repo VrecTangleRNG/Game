@@ -7,7 +7,7 @@
 /* --- Static global variables --- */
 
 static Level *runningLevel = NULL;
-static Level *levels = NULL;    // TODO: not yet freed
+static Level *levels = NULL;
 static uint2 levelCount = 0;
 /* --- ----------------------- --- */
 
@@ -34,7 +34,7 @@ void LoadCurrentLevel(char *tilemapFile, char *levelFile)
         {
             cJSON *levelsJSON = cJSON_GetObjectItem(world, "levels");
             cJSON *level = NULL;
-            uint2 levelCount = cJSON_GetArraySize(levelsJSON);
+            levelCount = cJSON_GetArraySize(levelsJSON);
 
             // Allocate memory for levels container
             if (!levels) levels = malloc(sizeof(Level));
@@ -42,7 +42,7 @@ void LoadCurrentLevel(char *tilemapFile, char *levelFile)
             {
                 Level *temp = realloc(levels, levelCount * sizeof(Level));
                 if (!temp) {printf("Memory error (level)"); return;}
-                levels = temp;
+                else levels = temp;
             }
             if (!levels) {printf("Memory error (level)"); return;}
 
@@ -56,7 +56,7 @@ void LoadCurrentLevel(char *tilemapFile, char *levelFile)
                 int checkpointCount = cJSON_GetArraySize(checkpoints);
 
                 // Allocate memory to holds all checkpoint ids
-                levels[levelIndex].checkpointIds = malloc(checkpointCount * sizeof(int));
+                levels[levelIndex].checkpointIds = malloc(checkpointCount * sizeof(uint2));
                 if (!levels[levelIndex].checkpointIds)
                 {
                     printf("Memory error (level)");
@@ -68,7 +68,7 @@ void LoadCurrentLevel(char *tilemapFile, char *levelFile)
                 {
                     int cpId = cJSON_GetArrayItem(checkpoints, i)->valueint;
                     levels[levelIndex].checkpointIds[i] = cpId;
-                    levels[levelIndex].cpIdCount = i + 1;
+                    levels[levelIndex].cpIdCount++;
                     // DEBUG: printf("cpId: %d, i: %d\n", levels[levelIndex].checkpointIds[i], i);
                 }
                 levels[levelIndex].mode = type->valueint;
@@ -79,7 +79,6 @@ void LoadCurrentLevel(char *tilemapFile, char *levelFile)
             }
         }
     }
-    levelCount = levelIndex;
 
     // Free memory
     free(levelString);
@@ -99,6 +98,15 @@ Level *GetRunningLevel(void)
 {
     return runningLevel;
 }
+
+void UnloadCurrentLevel(void)
+{
+    for (int i = 0; i < levelCount; i++)
+    {
+        free(levels[i].checkpointIds);
+    }
+    free(levels);
+}
 /* --- ------------ --- */
 
 
@@ -107,6 +115,24 @@ Level *GetRunningLevel(void)
 void InitLapTracker(LapTracker *lap, Level *level)
 {
     lap->currentLap = 1;
+    lap->firstIteration = false;
+    lap->currentCpIndex = 0;
     lap->currentCp = level->checkpointIds[0];
+}
+
+void RunLapTracker(LapTracker *lap, Level *level, b2ShapeId *targetShape)
+{
+    b2ShapeId *cpShape = CheckSensorCollision(targetShape, NULL, 1);
+    b2ShapeId *targetCpShape = GetCpShapeFromId(lap->currentCp);
+    if (cpShape != NULL && B2_ID_EQUALS(*cpShape, *targetCpShape))
+    {
+        if (lap->currentCpIndex == 0 && lap->firstIteration)
+        {
+            lap->currentLap++;
+        }
+        lap->firstIteration = true;
+        lap->currentCpIndex = (lap->currentCpIndex + 1) % level->cpIdCount;
+        lap->currentCp = level->checkpointIds[lap->currentCpIndex];
+    }
 }
 /* --- ----------------------------- --- */

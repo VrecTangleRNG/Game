@@ -30,7 +30,7 @@ UPDATE_STATE(MainMenu)
 	selection = (selection == 255) ? MENU_COUNT - 1 : selection % MENU_COUNT;
 
 	// Send signal to machine on player pressed enter key
-	if (IsKeyPressed(KEY_ENTER))
+	if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE))
 	{
 		switch (selection)
 		{

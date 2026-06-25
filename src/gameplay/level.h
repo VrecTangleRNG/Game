@@ -7,6 +7,8 @@
 #include "raylib.h"
 #include "cJSON/cJSON.h"
 
+#include "checkpoint.h"
+#include "../systems/physics.h"
 #include "../systems/utils.h"
 
 typedef enum
@@ -22,22 +24,26 @@ typedef struct
     float angle;
     char name[20];
     uint2 spawnpointId;
-    uint2 *checkpointIds; // TODO: fix this member allocation type later
+    uint2 *checkpointIds;
     uint2 cpIdCount;
 } Level;
 
 typedef struct
 {
     uint1 currentLap;
-    uint1 currentCp;
+    bool firstIteration;
+    uint1 currentCpIndex;
+    uint2 currentCp;
 } LapTracker;
 
 // Global gamemode module
 void LoadCurrentLevel(char *tilemapFile, char *levelFile);
 void SetRunningLevelIndex(int levelIndex);
 Level *GetRunningLevel(void);
+void UnloadCurrentLevel(void);
 
 // Circuit gamemode exclusive module
 void InitLapTracker(LapTracker *lap, Level *level);
+void RunLapTracker(LapTracker * lap, Level *level, b2ShapeId *targetShape);
 
 #endif

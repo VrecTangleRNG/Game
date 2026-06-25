@@ -2,6 +2,8 @@
 static StateStatus status = { STATE_CONTINUE, false, false };
 
 static LapTracker playerLap;
+static bool firstTimeEnter = true;
+static Stopwatch *playerLapTimer;
 
 
 // Initialize // Runs only once at directly before game loop
@@ -26,12 +28,31 @@ INIT_STATE(Circuit)
 	// Initialize player
 	InitLapTracker(&playerLap, level);
 	InitPlayer(GetSpawnpoint(level->spawnpointId).pos, level->angle);
+
+	// Set initial camera focus
+	Vector2 playerPos = GetCenterPlayerPos();
+	SetCameraPos(&playerPos);
+
+	// Initialize lap time
+	playerLapTimer = InitStopwatch("plyr");
 }
 
 
 // Update // Control the program flow with the return value (has deltaTime)
 UPDATE_STATE(Circuit)
 {
+	// Enter getReadyState first before playing any further
+	if (firstTimeEnter)
+	{
+		firstTimeEnter = false;
+		status.state = STATE_GET_READY;
+		return &status;
+	}
+	else status.state = STATE_CONTINUE;
+
+	// Start lap timer
+	playerLapTimer = RunStopwatch("plyr", false);
+
 	// Update player
 	UpdatePlayer(deltaTime);
 	Vector2 playerPos = GetCenterPlayerPos();
@@ -39,6 +60,9 @@ UPDATE_STATE(Circuit)
 
 	// Update physics world after all of physics action were made
 	UpdatePhysics(1.0f / GetConstantFPS(), deltaTime);
+
+	// Set progress that the player has made
+	RunLapTracker(&playerLap, GetRunningLevel(), GetPlayerShape());
 	return &status;
 }
 
@@ -58,6 +82,19 @@ DRAW_STATE(Circuit)
 	DrawMap();
 	DrawPlayer();
 	EndMode2D();
+	DrawText(TextFormat("Lap: %d/3", playerLap.currentLap), 10, 10, 30, BLACK);
+	DrawText
+	(
+		TextFormat
+		(
+			"Time: %02d:%02d.%03d",
+			ExtractTime(playerLapTimer->elapsed, MINUTES),
+			ExtractTime(playerLapTimer->elapsed, SECONDS),
+			ExtractTime(playerLapTimer->elapsed, MSECONDS)
+		),
+		10, 40, 30, BLACK
+	);
+	DrawRectangle(0, GetScreenHeight() - 20, 100, 30, BLACK);
 	DrawFPS(10, GetScreenHeight() - 20);
 }
 

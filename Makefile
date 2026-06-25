@@ -25,11 +25,12 @@ $(OBJ_PATH)%.o : src/assets_manager/%.c ; @echo "Updating $@" && $(CC) -c $< -o 
 
 $(OBJ_PATH)%.o : src/gameplay/%.c ; @echo "Updating $@" && $(CC) -c $< -o $@ -I $(INCLUDES)
 
+$(OBJ_PATH)%.o : src/systems/%.c ; @echo "Updating $@" && $(CC) -c $< -o $@ -I $(INCLUDES)
+
 $(OBJ_PATH)%.o : src/state_machine/%.c ; @echo "Updating $@" && $(CC) -c $< -o $@ -I $(INCLUDES)
 
 $(OBJ_PATH)%.o : src/state_machine/states/%.c ; @echo "Updating $@" && $(CC) -c $< -o $@ -I $(INCLUDES)
 
-$(OBJ_PATH)%.o : src/systems/%.c ; @echo "Updating $@" && $(CC) -c $< -o $@ -I $(INCLUDES)
 
 clear:
 	@rm -f $(OBJS) $(TARGET) $(D_TARGET)

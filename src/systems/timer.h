@@ -46,7 +46,9 @@ float GetConstantFPS(void);
 Time *GetVirtualTime(void);
 uint2 ExtractTime(float fsecs, TimeMeasurement measure);
 void CleanTimeStorage(void);
+Stopwatch *InitStopwatch(char *strpath);
 Stopwatch *RunStopwatch(char *strpath, bool relative);
+Countdown *InitCountdown(char *strpath);
 Countdown *RunCountdown(char *strpath, float duration, bool relative);
 float LinearTween(char *strpath, float start, float end, float duration, bool relative);
 

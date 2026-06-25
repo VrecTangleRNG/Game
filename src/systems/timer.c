@@ -28,8 +28,9 @@ void UpdateGameTime(void)
 	virtualTime.elapsed += virtualTime.delta;
 }
 
-// TODO: timing concern, idk what to do about it
-Stopwatch *RunStopwatch(char *strpath, bool relative)
+
+// TODO: optimize this
+Stopwatch *InitStopwatch(char *strpath)
 {
 	Stopwatch *buffer = (Stopwatch *)SearchTrie(timerStorage, strpath);
 	if (!buffer)
@@ -38,16 +39,20 @@ Stopwatch *RunStopwatch(char *strpath, bool relative)
 		if (!buffer) {printf("Unable to create space\n"); return NULL;}
 		InsertTrie(timerStorage, strpath, buffer);
 	}
-	if (!buffer->running)
-	{
-		buffer->running = true;
-		buffer->startTime = (relative) ? GetTime() : virtualTime.elapsed;
-	}
+	buffer->startTime = GetTime();
+	return buffer;
+}
+
+// NOTE: timing concern, idk what to do about it
+Stopwatch *RunStopwatch(char *strpath, bool relative)
+{
+	Stopwatch *buffer = InitStopwatch(strpath);
+	if (!buffer->running) buffer->running = true;
 	if (buffer->running) buffer->elapsed += (relative) ? GetFrameTime() : virtualTime.delta;
 	return buffer;
 }
 
-Countdown *RunCountdown(char *strpath, float duration, bool relative)
+Countdown *InitCountdown(char *strpath)
 {
 	Countdown *buffer = (Countdown *)SearchTrie(timerStorage, strpath);
 	if (!buffer)
@@ -56,7 +61,13 @@ Countdown *RunCountdown(char *strpath, float duration, bool relative)
 		if (!buffer) {printf("Unable to create space\n"); return NULL;}
 		InsertTrie(timerStorage, strpath, buffer);
 	}
-	// TODO: holy ifs
+	return buffer;
+}
+
+Countdown *RunCountdown(char *strpath, float duration, bool relative)
+{
+	Countdown *buffer = InitCountdown(strpath);
+	// Holy ifs
 	if (!buffer->started && !buffer->finished)
 	{
 		buffer->duration = duration;
@@ -122,5 +133,6 @@ float LinearTween(char *strpath, float start, float end, float duration, bool re
 void CleanTimeStorage(void)
 {
 	FreeTrie(timerStorage);
+	timerStorage = CreateTrie();
 }
 /* --- ------------ --- */

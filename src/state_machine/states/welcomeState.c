@@ -18,7 +18,7 @@ UPDATE_STATE(Welcome)
 {
 	// NOTE: might overflow that leads to undef behaviour
 	Stopwatch *sw = RunStopwatch("wlcm", true);
-	transparency = ((uint2)(sw->elapsed) % 2) ? 255 : 0;
+	transparency = ((uint2)(sw->elapsed * 1.75f) % 2) ? 255 : 0;
 	if (IsKeyPressed(KEY_SPACE))
 	{
 		status.state = STATE_MAIN_MENU;
