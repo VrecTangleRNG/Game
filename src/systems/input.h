@@ -7,7 +7,13 @@
 
 
 // Function declaration //
+// universal input
 bool EnterInput(void);
 bool PauseInput(void);
+
+// Car player control
+bool AccelerateInput(void);
+bool BrakeInput(void);
+float SteeringInput(void);
 
 #endif

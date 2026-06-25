@@ -15,4 +15,19 @@ bool PauseInput(void)
 {
     return IsKeyPressed(KEY_ESCAPE);
 }
+
+bool AccelerateInput(void)
+{
+    return IsKeyDown(KEY_UP);
+}
+
+bool BrakeInput(void)
+{
+    return IsKeyDown(KEY_LEFT);
+}
+
+float SteeringInput(void)
+{
+    return IsKeyDown(KEY_D) - IsKeyDown(KEY_A);
+}
 /* --- ------------------- --- */

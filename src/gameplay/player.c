@@ -80,8 +80,8 @@ void InitPlayer(b2Vec2 initPos, float initAngle)
 void UpdatePlayer(float deltaTime)
 {
 	// Control movement and rotation based on player input
-	int gasPad = (IsKeyDown(KEY_LEFT) - IsKeyDown(KEY_UP)) * playerControl;
-	int steerPad = IsKeyDown(KEY_D) - IsKeyDown(KEY_A);
+	float gasPad = (BrakeInput() - AccelerateInput()) * playerControl;
+	float steerPad = SteeringInput();
 
 	// Change the steering angle based on player input
 	static float steeringAngle = 0.0f;
@@ -95,10 +95,10 @@ void UpdatePlayer(float deltaTime)
 		lastSteer = steerPad;
 		steeringAngle = Clamp(steeringAngle, -maxAngle, maxAngle);
 	}
-	else if (steerPad == 0)
+	else
 	{
 		steeringAngle -= lastSteer * STEERING_SPEED * deltaTime;
-		if (lastSteer > 0)
+		if (lastSteer >= .0f)
 		{
 			steeringAngle = Clamp(steeringAngle, 0.0f, maxAngle);
 		}
@@ -118,7 +118,7 @@ void UpdatePlayer(float deltaTime)
 	}
 
 	// Set where the rear forces is acting
-	Vector2 forceMagnitude = { F_ENGINE * (float)gasPad * .5f, 0.0f };
+	Vector2 forceMagnitude = { F_ENGINE * gasPad * .5f, 0.0f };
 	Vector2 rearForceMagnitude = Vector2Rotate(forceMagnitude, carRad);
 	Vector2 rearForcePoint = { carExtent.x, 0.0f };
 	rearForcePoint = Vector2Rotate(rearForcePoint, carRad);
@@ -197,10 +197,14 @@ void DrawPlayer(void)
 
 
 /* --- Methods --- */
-
-inline void SetPlayerControl(bool isHeld)
+void SetPlayerControl(uint2 control)
 {
-	playerControl = isHeld;
+	switch (control) {
+		case AUTO:		break;
+		case RELEASE:	playerControl = 0; break;
+		case HELD:		playerControl = 1; break;
+		default: break;
+	}
 }
 
 Vector2 GetCenterPlayerPos(void)
