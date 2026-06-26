@@ -24,8 +24,8 @@
 
 typedef struct Node
 {
-	void *valueptr;					// Typecast to (datatype *)
-	struct Node *next[TRIE_SIZE];	// Lowercases and decimal digits
+	void *valueptr;
+	struct Node *next[TRIE_SIZE];
 } Trie;
 
 typedef struct List
@@ -42,7 +42,7 @@ void InsertTrie(Trie *root, char *strpath, void *valueptr);		// Make a new branc
 void *SearchTrie(Trie *root, char *strpath);					// Returns the value held by strpath, and NULL if not found
 void FreeTrie(Trie *root);										// Free a trie and its branches recursively
 int Hash(char c);												// Returns int; the index of c for trie insertion
-	// Linked list A.K.A Stack
+	// Stack
 Stack *CreateStack(void);
 void Push(Stack **head, void *valueptr);
 void *Pop(Stack **head);

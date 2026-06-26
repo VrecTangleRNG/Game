@@ -63,6 +63,7 @@ UPDATE_STATE(Circuit)
 	UpdatePhysics(1.0f / GetConstantFPS(), deltaTime);
 
 	// Set progress that the player has made
+	// TODO: it can cause SEGV
 	RunLapTracker(&playerLap, GetRunningLevel(), GetPlayerShape());
 
 	// Control state flow
@@ -90,12 +91,28 @@ PAUSE_STATE(Circuit)
 // Draw // Generic draw function runs directly after update
 DRAW_STATE(Circuit)
 {
+	// Draw physical gameplay objects
 	ClearBackground(GRAY);
 	BeginMode2D(GetCamera());
 	DrawMap();
 	DrawPlayer();
 	EndMode2D();
-	DrawText(TextFormat("Lap: %d/3", playerLap.currentLap), 10, 10, 30, BLACK);
+
+	// Control ui behaviour during some state
+	switch (status.state)
+	{
+		case STATE_CONTINUE: break;
+		case STATE_FINISHED: return;
+	}
+
+	// Draw lap counter
+	DrawText
+	(
+		TextFormat("Lap: %d/3", (playerLap.currentLap > 3) ? 3 : playerLap.currentLap),
+		10, 10, 30, BLACK
+	);
+
+	// Draw lap timer
 	DrawText
 	(
 		TextFormat
@@ -107,6 +124,8 @@ DRAW_STATE(Circuit)
 		),
 		10, 40, 30, BLACK
 	);
+
+	// Draw FPS
 	DrawRectangle(0, GetScreenHeight() - 20, 100, 30, BLACK);
 	DrawFPS(10, GetScreenHeight() - 20);
 }

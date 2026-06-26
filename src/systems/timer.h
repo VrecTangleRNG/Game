@@ -46,7 +46,7 @@ float GetConstantFPS(void);
 Time *GetVirtualTime(void);
 uint2 ExtractTime(float fsecs, TimeMeasurement measure);
 void CleanTimeStorage(void);
-Stopwatch *InitStopwatch(char *strpath);
+Stopwatch *InitStopwatch(char *strpath);											// Initialize Stopwatch, if strpath already exist, return that address
 Stopwatch *RunStopwatch(char *strpath, bool relative);
 Countdown *InitCountdown(char *strpath);
 Countdown *RunCountdown(char *strpath, float duration, bool relative);

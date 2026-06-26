@@ -1,11 +1,13 @@
 #include "../stateList.h"
 static StateStatus status = { STATE_CONTINUE, false, false };
 
+static Stopwatch *playerLapTime = NULL;
+
 
 // Initialize // Runs only once at directly before game loop
 INIT_STATE(Finished)
 {
-	return;
+	playerLapTime = InitStopwatch("plyr");
 }
 
 
@@ -26,7 +28,18 @@ PAUSE_STATE(Finished)
 // Draw // Generic draw function runs directly after update
 DRAW_STATE(Finished)
 {
-	return;
+	DrawText("YOU FINISHED 1st!", 20, GetScreenHeight() * .5f - 25, 50, BLACK);
+	DrawText
+	(
+		TextFormat
+		(
+			"Your lap time: %02d:%02d.%03d",
+			ExtractTime(playerLapTime->elapsed, MINUTES),
+			ExtractTime(playerLapTime->elapsed, SECONDS),
+			ExtractTime(playerLapTime->elapsed, MSECONDS)
+		),
+		20, GetScreenHeight() * .5f + 25, 30, BLACK
+	);
 }
 
 

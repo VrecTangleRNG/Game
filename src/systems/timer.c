@@ -28,7 +28,6 @@ void UpdateGameTime(void)
 	virtualTime.elapsed += virtualTime.delta;
 }
 
-
 // TODO: optimize this
 Stopwatch *InitStopwatch(char *strpath)
 {
