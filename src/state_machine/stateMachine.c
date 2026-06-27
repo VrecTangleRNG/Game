@@ -8,7 +8,7 @@
 
 static StateStatus upcomingStateStat = {STATE_BASE, false, false};
 static States *currentState = NULL;
-static Stack *stateStack = NULL;
+static Deque *stateDeque = NULL;	// TODO: not yet freed
 /* --- ----------------------- --- */
 
 
@@ -16,59 +16,46 @@ static Stack *stateStack = NULL;
 
 int RunStateStack(void)
 {
+	// Initialization of currentState so this not trigger segmentation fault
 	currentState = (States *)(stateList + upcomingStateStat.state);
 
-	// Determine whether the stateStack is empty or already filled (if so, Push)
-	if (!stateStack)
-	{
-		stateStack = CreateStack();
-		stateStack->valueptr = currentState;
-	}
-	else
-	{
-		Push(&stateStack, currentState);
-	}
-	currentState->init();	// Silly me
+	// Check whether stateDeque is empty or already filled (if so, Push)
+	if (!stateDeque) stateDeque = CreateDeque();
+	InsertFrontDq(&stateDeque, currentState);
 
 	// Game loop
+	currentState->init();	//<- Silly me
 	while (true)
 	{
-		bool firstIteration = true;
-		Stack *layer = NULL;
-		StackForEach(layer, stateStack)
+		// Update head
+		UpdateGameTime();
+		upcomingStateStat = *((States *)stateDeque->front->valueptr)->update(GetVirtualTime()->delta);
+
+		// Pause tails
+		DLL *layer = stateDeque->front;
+		while (layer)
 		{
-			// Update head, then pause tails
-			UpdateGameTime();
-			if (firstIteration)
-			{
-				upcomingStateStat = *(((States *)(layer->valueptr))->update(GetVirtualTime()->delta));
-				firstIteration = false;
-			}
-			else
-			{
-				((States *)(layer->valueptr))->pause(GetVirtualTime()->delta);
-			}
+			((States *)(layer->valueptr))->pause(GetVirtualTime()->delta);
+			layer = layer->next;
 		}
 
-		// Draw
-		layer = NULL;
+		// Draw from rear
+		layer = stateDeque->rear;
 		BeginDrawing();
-		StackForEach(layer, stateStack)
+		while (layer)
 		{
 			((States *)(layer->valueptr))->draw();
+			layer = layer->prev;
 		}
 		EndDrawing();
-
-		// Check for exit condition
-		if (WindowShouldClose()) return 0;
 
 		// If none of this was run, continue the loop
 		// TODO: this was unoptimized
 		if (upcomingStateStat.pop)
 		{
 			// Pop state and run state underneath it
-			((States *)(stateStack->valueptr))->exit();
-			Pop(&stateStack);
+			((States *)(stateDeque->front->valueptr))->exit();
+			PopFrontDq(&stateDeque);
 			continue;
 		}
 		if (upcomingStateStat.state != STATE_CONTINUE)
@@ -76,13 +63,16 @@ int RunStateStack(void)
 			// Replace the head by poping head and pushing a new one
 			if (upcomingStateStat.replace)
 			{
-				((States *)(stateStack->valueptr))->exit();
-				Pop(&stateStack);
+				((States *)(stateDeque->front->valueptr))->exit();
+				PopFrontDq(&stateDeque);
 			}
 
 			// Push new state
 			break;
 		}
+
+		// Check for exit condition
+		if (WindowShouldClose()) return 0;
 	}
 	return 1;
 }

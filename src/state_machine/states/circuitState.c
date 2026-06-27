@@ -63,7 +63,6 @@ UPDATE_STATE(Circuit)
 	UpdatePhysics(1.0f / GetConstantFPS(), deltaTime);
 
 	// Set progress that the player has made
-	// TODO: it can cause SEGV
 	RunLapTracker(&playerLap, GetRunningLevel(), GetPlayerShape());
 
 	// Control state flow
