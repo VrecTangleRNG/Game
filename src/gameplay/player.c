@@ -11,7 +11,6 @@ static float
 	LINEAR_DAMPING 	= 2.5f,										// Between 2.0 ~ 8.0
 	ANGULAR_DAMPING	= 14.0f,
 	DENSITY 		= 50.0f / (PX_PER_METER * PX_PER_METER),	// kg / m^2
-	F_ENGINE 		= 25000.0f * PX_PER_METER,					// kg * m / sec^2
 	TIRE_GRIP		= 0.85f,
 	STEERING_SPEED	= 600.0f;
 
@@ -36,8 +35,9 @@ void InitPlayer(b2Vec2 initPos, float initAngle)
 {
 	// Set up initial car "body"
 	b2BodyDef bodyDef = b2DefaultBodyDef();
-	bodyDef.linearDamping = LINEAR_DAMPING;
-	bodyDef.angularDamping = ANGULAR_DAMPING;
+	// TODO: uncomment this
+	// bodyDef.linearDamping = LINEAR_DAMPING;
+	// bodyDef.angularDamping = ANGULAR_DAMPING;
 	bodyDef.position = initPos;
 	bodyDef.rotation = b2MakeRot(DEG2RAD * initAngle);
 	bodyDef.type = b2_dynamicBody;
@@ -80,91 +80,36 @@ void InitPlayer(b2Vec2 initPos, float initAngle)
 void UpdatePlayer(float deltaTime)
 {
 	// Control movement and rotation based on player input
-	float gasPad = (BrakeInput() - AccelerateInput()) * playerControl;
+	float gasPad = (AccelerateInput() - BrakeInput()) * playerControl;
 	float steerPad = SteeringInput();
+	float mass = b2Body_GetMass(car.bodyId);
 
-	// Change the steering angle based on player input
-	static float steeringAngle = 0.0f;
-	steeringAngle += steerPad * STEERING_SPEED * deltaTime;
+	b2Vec2 vel = b2Body_GetLinearVelocity(car.bodyId);
+	float targetVel = 100.0f * gasPad;
+	float acceleration = (targetVel - vel.x) * PX_PER_METER;
+	float force = mass * acceleration;
+	b2Body_ApplyForceToCenter(car.bodyId, (b2Vec2){ force, 0 }, true);
+	printf("mass: %.2f\n", mass);
+	printf("vel x: %.2f\n", vel.x);
 
-	// If no input from steer. then return steer to center
-	float maxAngle = 60.0f;
-	static int lastSteer = 0;
-	if (steerPad != 0)
-	{
-		lastSteer = steerPad;
-		steeringAngle = Clamp(steeringAngle, -maxAngle, maxAngle);
-	}
-	else
-	{
-		steeringAngle -= lastSteer * STEERING_SPEED * deltaTime;
-		if (lastSteer >= .0f)
-		{
-			steeringAngle = Clamp(steeringAngle, 0.0f, maxAngle);
-		}
-		else
-		{
-			steeringAngle = Clamp(steeringAngle, -maxAngle, 0.0f);
-		}
-	}
-
-	// Control tire angle direction in facing
-	carRad = b2Rot_GetAngle(b2Body_GetRotation(car.bodyId));
-	carAngle = RAD2DEG * carRad;
-	tireAngle = carAngle + steeringAngle;
-	if (tireAngle < 0.0f)
-	{
-		tireAngle += 360.0f;
-	}
-
-	// Set where the rear forces is acting
-	Vector2 forceMagnitude = { F_ENGINE * gasPad * .5f, 0.0f };
-	Vector2 rearForceMagnitude = Vector2Rotate(forceMagnitude, carRad);
-	Vector2 rearForcePoint = { carExtent.x, 0.0f };
-	rearForcePoint = Vector2Rotate(rearForcePoint, carRad);
-	rearForcePoint = Vector2Add(B2vecToRlvec(carPosCenter), rearForcePoint);
-
-	// Set where the front force is acting
-	Vector2 frontForceMagnitude = Vector2Rotate
-	(
-		Vector2Rotate(forceMagnitude, carRad),
-		steeringAngle * DEG2RAD
-	);
-	Vector2 frontForcePoint = { -carExtent.x, 0.0f };
-	frontForcePoint = Vector2Rotate(frontForcePoint, carRad);
-	frontForcePoint = Vector2Add(B2vecToRlvec(carPosCenter), frontForcePoint);
-
-	// Apply forces
-	b2Body_ApplyForce
-	(
-		car.bodyId,
-		RlvecToB2vec(rearForceMagnitude),
-		RlvecToB2vec(rearForcePoint),
-		true
-	);
-	b2Body_ApplyForce
-	(
-		car.bodyId,
-		RlvecToB2vec(frontForceMagnitude),
-		RlvecToB2vec(frontForcePoint),
-		true
-	);
-
-	// Fix right velocity to control sliding
-	Vector2 currentVelocity = B2vecToRlvec(b2Body_GetLinearVelocity(car.bodyId));
-	Vector2 right =
-	{
-		cosf((carAngle + 90.0f) * DEG2RAD),
-		sinf((carAngle + 90.0f) * DEG2RAD)
-	};
-	float lateralSpeed = Vector2DotProduct(currentVelocity, right);
-	Vector2 killLateral = Vector2Scale(right, -lateralSpeed * TIRE_GRIP);
-	b2Body_SetLinearVelocity
-	(
-		car.bodyId,
-		RlvecToB2vec(Vector2Add(currentVelocity, killLateral))
-	);
-
+	// f = m(v1 - v0)/t
+	// (v1 - v0) =
+	// NOTE: uncomment these
+	// // Fix right velocity to control sliding
+	// Vector2 currentVelocity = B2vecToRlvec(b2Body_GetLinearVelocity(car.bodyId));
+	// Vector2 right =
+	// {
+	// 	cosf((carAngle + 90.0f) * DEG2RAD),
+	// 	sinf((carAngle + 90.0f) * DEG2RAD)
+	// };
+	// float lateralSpeed = Vector2DotProduct(currentVelocity, right);
+	// Vector2 killLateral = Vector2Scale(right, -lateralSpeed * TIRE_GRIP);
+	// b2Body_SetLinearVelocity
+	// (
+	// 	car.bodyId,
+	// 	RlvecToB2vec(Vector2Add(currentVelocity, killLateral))
+	// );
+	//
 	// Get linear and angular tranformations
 	carPosCenter = b2Body_GetWorldPoint(car.bodyId, (b2Vec2){ 0.0f, 0.0f });
 	carPosEdge = b2Body_GetWorldPoint
