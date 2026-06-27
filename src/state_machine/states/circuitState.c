@@ -108,7 +108,7 @@ DRAW_STATE(Circuit)
 	DrawText
 	(
 		TextFormat("Lap: %d/3", (playerLap.currentLap > 3) ? 3 : playerLap.currentLap),
-		10, 10, 30, BLACK
+		10, 10, 30, WHITE
 	);
 
 	// Draw lap timer
@@ -121,7 +121,7 @@ DRAW_STATE(Circuit)
 			ExtractTime(playerLapTimer->elapsed, SECONDS),
 			ExtractTime(playerLapTimer->elapsed, MSECONDS)
 		),
-		10, 40, 30, BLACK
+		10, 40, 30, WHITE
 	);
 
 	// Draw FPS

@@ -33,7 +33,7 @@ PAUSE_STATE(Countdown)
 // Draw // Generic draw function runs directly after update
 DRAW_STATE(Countdown)
 {
-	DrawText(TextFormat("%d", (uint1)countdown->remaining + 1), GetScreenWidth() * .25f, GetScreenHeight() * .75f, 30, BLACK);
+	DrawText(TextFormat("%d", (uint1)countdown->remaining + 1), GetScreenWidth() * .25f, GetScreenHeight() * .75f, 30, WHITE);
 }
 
 

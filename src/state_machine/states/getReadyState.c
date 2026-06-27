@@ -37,7 +37,7 @@ DRAW_STATE(GetReady)
 	DrawText
 	(
 		"Click to start", GetScreenWidth() * .25f, GetScreenHeight() * .75f,
-		30, (Color){ 0, 0, 0, blink }
+		30, (Color){ 255, 255, 255, blink }
 	);
 	return;
 }

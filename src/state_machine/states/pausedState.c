@@ -33,8 +33,8 @@ PAUSE_STATE(Paused)
 // Draw // Generic draw function runs directly after update
 DRAW_STATE(Paused)
 {
-	DrawText("PAUSED", 20, GetScreenHeight() * .5f - 25, 50, BLACK);
-	DrawText("Click ENTER/SPACE to Resume", 20, GetScreenHeight() * .5f + 15, 30, BLACK);
+	DrawText("PAUSED", 20, GetScreenHeight() * .5f - 25, 50, WHITE);
+	DrawText("Click ENTER/SPACE to Resume", 20, GetScreenHeight() * .5f + 15, 30, WHITE);
 	return;
 }
 

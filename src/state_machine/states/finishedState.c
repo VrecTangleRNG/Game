@@ -28,7 +28,7 @@ PAUSE_STATE(Finished)
 // Draw // Generic draw function runs directly after update
 DRAW_STATE(Finished)
 {
-	DrawText("YOU FINISHED 1st!", 20, GetScreenHeight() * .5f - 25, 50, BLACK);
+	DrawText("YOU FINISHED 1st!", 20, GetScreenHeight() * .5f - 25, 50, WHITE);
 	DrawText
 	(
 		TextFormat
@@ -38,7 +38,7 @@ DRAW_STATE(Finished)
 			ExtractTime(playerLapTime->elapsed, SECONDS),
 			ExtractTime(playerLapTime->elapsed, MSECONDS)
 		),
-		20, GetScreenHeight() * .5f + 25, 30, BLACK
+		20, GetScreenHeight() * .5f + 25, 30, WHITE
 	);
 }
 
