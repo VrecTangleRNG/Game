@@ -82,18 +82,15 @@ void UpdatePlayer(float deltaTime)
 	// Control movement and rotation based on player input
 	float gasPad = (AccelerateInput() - BrakeInput()) * playerControl;
 	float steerPad = SteeringInput();
-	float mass = b2Body_GetMass(car.bodyId);
 
-	b2Vec2 vel = b2Body_GetLinearVelocity(car.bodyId);
-	float targetVel = 100.0f * gasPad;
-	float acceleration = (targetVel - vel.x) * PX_PER_METER;
+	float mass = b2Body_GetMass(car.bodyId);
+	float acceleration = 100.0f * PX_PER_METER * gasPad;
 	float force = mass * acceleration;
 	b2Body_ApplyForceToCenter(car.bodyId, (b2Vec2){ force, 0 }, true);
-	printf("mass: %.2f\n", mass);
-	printf("vel x: %.2f\n", vel.x);
 
-	// f = m(v1 - v0)/t
-	// (v1 - v0) =
+	// DEBUG
+	// printf("mass: %.2f\n", mass);
+
 	// NOTE: uncomment these
 	// // Fix right velocity to control sliding
 	// Vector2 currentVelocity = B2vecToRlvec(b2Body_GetLinearVelocity(car.bodyId));

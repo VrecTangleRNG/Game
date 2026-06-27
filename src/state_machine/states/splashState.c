@@ -17,7 +17,7 @@ UPDATE_STATE(Splash)
 	Stopwatch *sw = RunStopwatch("splash", true);
 	if (sw->elapsed < 2.0f) fade = LinearTween("in", .0f, 255.0f, .5f, true);
 	else fade = LinearTween("out", 255.0f, .0f, .5f, true);
-	if (sw->elapsed > 2.6f)
+	if (sw->elapsed > 2.6f || EnterInput())
 	{
 		status.state = STATE_WELCOME;
 		status.replace = true;
