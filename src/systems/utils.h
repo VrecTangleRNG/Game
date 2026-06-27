@@ -22,18 +22,32 @@
 #define uint2 uint16_t
 #define uint4 uint32_t
 
-typedef struct Node
+typedef struct TrieNode
 {
 	void *valueptr;
-	struct Node *next[TRIE_SIZE];
+	struct TrieNode *next[TRIE_SIZE];
 } Trie;
 
-typedef struct List
+typedef struct SinglyNode
 {
 	void *valueptr;
-	struct List *next;
-} Stack;
+	struct SinglyNode *next;
+} SLL;
+typedef SLL Stack;
 
+typedef struct DoublyNode
+{
+	void *valueptr;
+	struct DoublyNode *next;
+	struct DoublyNode *prev;
+} DLL;
+
+typedef struct
+{
+	uint2 count;
+	DLL *front;
+	DLL *rear;
+} Deque;
 
 // Data structures related functions
 	//Trie
@@ -47,6 +61,12 @@ Stack *CreateStack(void);
 void Push(Stack **head, void *valueptr);
 void *Pop(Stack **head);
 #define StackForEach(item, stack) for (item = (stack); item != NULL; item = (item)->next)
+	// Deque
+Deque *CreateDeque(void);
+void InsertFrontDq(Deque **dq, void *valueptr);
+void InsertRearDq(Deque **dq, void *valueptr);
+void *PopFrontDq(Deque **dq);
+void *PopRearDq(Deque **dq);
 
 // Linear math related functions
 int IntPower(int base, int exp);

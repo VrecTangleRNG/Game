@@ -61,10 +61,8 @@ int Hash(char c)
 
 Stack *CreateStack(void)
 {
-	Stack *base = malloc(sizeof(Stack));
+	Stack *base = calloc(1, sizeof(Stack));
 	if (!base) {printf("Unable to create Stack"); return NULL;}
-	base->valueptr = NULL;
-	base->next = NULL;
 	return base;
 }
 
@@ -86,6 +84,85 @@ void *Pop(Stack **head)
 	void *valueptr = temp->valueptr;
 	*head = (*head)->next;
 	if (temp) free(temp);
+	return valueptr;
+}
+
+Deque *CreateDeque(void)
+{
+	Deque *buffer = calloc(1, sizeof(Deque));
+	if (!buffer) {printf("Unable to create Deque"); return NULL;}
+	return buffer;
+}
+
+void InsertFrontDq(Deque **dq, void *valueptr)
+{
+	Deque *temp = *dq;
+	DLL *buffer = malloc(sizeof(DLL));
+	if (!buffer) {printf("Unable to create DLL"); return;}
+	buffer->valueptr = valueptr;
+	if (temp->count == 0)
+	{
+		temp->front = temp->rear = buffer;
+		temp->count = 1;
+		buffer->next = buffer->prev = NULL;
+	}
+	else
+	{
+		buffer->next = temp->front;
+		buffer->prev = NULL;
+		temp->front = temp->front->prev = buffer;
+		temp->count++;
+	}
+}
+
+void InsertRearDq(Deque **dq, void *valueptr)
+{
+	Deque *temp = *dq;
+	DLL *buffer = malloc(sizeof(DLL));
+	if (!buffer) {printf("Unable to create DLL"); return;}
+	buffer->valueptr = valueptr;
+	if (temp->count == 0)
+	{
+		temp->rear = temp->front = buffer;
+		temp->count = 1;
+		buffer->next = buffer->prev = NULL;
+	}
+	else
+	{
+		buffer->prev = temp->rear;
+		buffer->next = NULL;
+		temp->rear = temp->rear->next = buffer;
+		temp->count++;
+	}
+}
+
+void *PopFrontDq(Deque **dq)
+{
+	Deque *temp = *dq;
+	DLL *buffer = temp->front;
+	if (temp->count > 1)
+	{
+		temp->front = buffer->next;
+		temp->front->prev = NULL;
+	}
+	void *valueptr = buffer->valueptr;
+	free(buffer);
+	temp->count--;
+	return valueptr;
+}
+
+void *PopRearDq(Deque **dq)
+{
+	Deque *temp = *dq;
+	DLL *buffer = temp->rear;
+	if (temp->count > 1)
+	{
+		temp->rear = buffer->prev;
+		temp->rear->next = NULL;
+	}
+	void *valueptr = buffer->valueptr;
+	free(buffer);
+	temp->count--;
 	return valueptr;
 }
 
