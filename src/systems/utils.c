@@ -199,6 +199,16 @@ void TruncateString(char *string, signed int cut)
 	else return;
 }
 
+uint2 ExtractAlpha(char *string)
+{
+	uint2 len = strlen(string);
+	for (uint2 i = 0; i < len; i++)
+	{
+		if (isdigit(string[i])) return i + 1;
+	}
+	return 0;
+}
+
 Vector2 B2vecToRlvec(b2Vec2 v)
 {
 	return (Vector2){ v.x, v.y };

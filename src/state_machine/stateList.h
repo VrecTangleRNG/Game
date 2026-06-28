@@ -38,12 +38,13 @@
 #define GAME_STATES\
 	X(STATE_SPLASH, Splash, spls)\
 	X(STATE_WELCOME, Welcome, wlcm)\
-	X(STATE_MAIN_MENU, MainMenu, mnmn)\
+	X(STATE_MAIN_MENU, MainMenu, main)\
 	X(STATE_CIRCUIT, Circuit, crct)\
 	X(STATE_GET_READY, GetReady, gtrd)		/* Gatorade */\
 	X(STATE_COUNTDOWN, Countdown, cndn)\
 	X(STATE_FINISHED, Finished, fnsd)\
-	X(STATE_PAUSED, Paused, pasd)
+	X(STATE_PAUSED, Paused, paus)\
+	X(STATE_SELECT_CAR, SelectCar, scar)
 
 #define INIT_STATE(function) void Init_##function##_(void)
 #define UPDATE_STATE(function) StateStatus *Update_##function##_(float deltaTime)

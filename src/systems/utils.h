@@ -74,6 +74,7 @@ int ExtractNumerics(char *string);
 
 // String related function
 void TruncateString(char *string, signed int cut);				// Cut string from index (cut)
+uint2 ExtractAlpha(char *string);
 
 // Vector related utilities
 Vector2 B2vecToRlvec(b2Vec2 v);

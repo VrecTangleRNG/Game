@@ -63,7 +63,8 @@ void LoadTextureSheet(const char *filename)
 		*texDatEach = (TextureData)
 		{
 			{x->valueint, y->valueint, w->valueint, h->valueint},
-			loadedTextureCount - 1
+			loadedTextureCount - 1,
+			frameCount
 		};
 		char tempstr[32];
 		strcpy(tempstr, textureName->string);
@@ -76,15 +77,16 @@ void LoadTextureSheet(const char *filename)
 	cJSON_Delete(json);
 }
 
-void DrawSheetSection(char *file, Vector2 pos, Vector2 origin, float rot, Color tint)
+uint1 DrawSheetSection(char *file, Vector2 pos, Vector2 origin, float rot, Color tint)
 {
 	char tempstr[32];
 	strcpy(tempstr, file);
 	TruncateString(tempstr, -4);
 	TextureData *data = (TextureData *)SearchTrie(textureDatas, tempstr);
+	if (!data) return 0;
 	Rectangle destRec = { pos.x, pos.y, data->rect.width, data->rect.height };
 	DrawTexturePro(textures[data->textureIndex], data->rect, destRec, origin, rot, tint);
-	return;
+	return 1;
 }
 
 void FreeAllTextures(void)
@@ -110,11 +112,13 @@ void FreeAllTextures(void)
 
 TextureData *GetSheetData(char *file)
 {
-	char tempstr[32];
+	char *tempstr = malloc(strlen(file) + 1);
+	if (!tempstr) {printf("Failed to load tile texture\n"); return NULL;}
 	strcpy(tempstr, file);
 	TruncateString(tempstr, -4);
 	TextureData *val = (TextureData *)SearchTrie(textureDatas, tempstr);
 	if (val) return val;
+	free(tempstr);
 	return NULL;
 }
 /* --- ------- --- */

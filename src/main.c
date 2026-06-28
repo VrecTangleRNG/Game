@@ -25,6 +25,7 @@
 // Start of the program
 int main(void)
 {
+	ChangeDirectory(GetApplicationDirectory());
 	InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Racing Game");
 	SetExitKey(KEY_NULL);
 	TimerInit(FPS, 1.0f);

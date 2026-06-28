@@ -81,7 +81,7 @@ void UpdatePlayer(float deltaTime)
 {
 	// Control movement and rotation based on player input
 	float gasPad = (AccelerateInput() - BrakeInput()) * playerControl;
-	float steerPad = SteeringInput();
+	float steerPad = SteeringInput() * playerControl;
 
 	// Calculate engine force
 	float mass = b2Body_GetMass(car.bodyId);

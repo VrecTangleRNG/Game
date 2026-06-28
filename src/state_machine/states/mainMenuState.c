@@ -40,6 +40,7 @@ UPDATE_STATE(MainMenu)
 				break;
 
 			case CAR_SELECT:
+				status.state = STATE_SELECT_CAR;
 				break;
 
 			case QUIT:
