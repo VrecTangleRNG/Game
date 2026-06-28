@@ -136,15 +136,6 @@ void UpdatePlayer(float deltaTime)
 		b2Body_SetLinearVelocity(car.bodyId, (b2Vec2){ .0f, .0f });
 	}
 
-	// DEBUG
-	// static float counter = 0;
-	// counter += GetFrameTime();
-	// if (counter > .5f)
-	// {
-	// 	counter = 0;
-	// 	printf("velocity: %.2f\n", b2Length(vel));
-	// }
-
 	// Fix right velocity to control sliding
 	Vector2 currentVelocity = B2vecToRlvec(b2Body_GetLinearVelocity(car.bodyId));
 	Vector2 right = { cosf(carRad + B2_PI * .5f), sinf(carRad + B2_PI * .5f) };
