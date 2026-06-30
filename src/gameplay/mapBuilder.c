@@ -325,7 +325,7 @@ void DrawMap(void)
 				Object currentObject = tm.layers[lIndex].objects[oIndex];
 				int tilesetIndex = GetTilesetIndex(currentObject.gid);
 				Vector2 pos = { currentObject.rect.x, currentObject.rect.y };
-				DrawSheetSection(ts[tilesetIndex].tileType, pos, Vector2Zero(), 0.0f, WHITE);
+				DrawSheetSection(ts[tilesetIndex].tileType, pos, Vector2Zero(), 0.0f, 1.0f, WHITE);
 			}
 		}
 	}

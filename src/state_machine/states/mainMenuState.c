@@ -54,6 +54,7 @@ UPDATE_STATE(MainMenu)
 // Pause // Do something in background
 PAUSE_STATE(MainMenu)
 {
+	status.state = STATE_CONTINUE;
 	return;
 }
 

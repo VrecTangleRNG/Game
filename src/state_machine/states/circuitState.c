@@ -67,7 +67,7 @@ UPDATE_STATE(Circuit)
 
 	// Control state flow
 	if (playerLap.currentLap > 3)	status.state = STATE_FINISHED;
-	if (PauseInput()) 				status.state = STATE_PAUSED;
+	if (EscapeInput()) 				status.state = STATE_PAUSED;
 	return &status;
 }
 

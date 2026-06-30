@@ -1,19 +1,29 @@
 #include "../stateList.h"
 static StateStatus status = { STATE_CONTINUE, false, false };
 
-#define IDENTIFIER "car"
+#define IDENTIFIER "car%d.png"
 static uint2 carCount = 0;
+static int2 margin = 256;
+static int2 selection = 0;
+
 
 // Initialize // Runs only once at directly before game loop
 INIT_STATE(SelectCar)
 {
-	carCount = GetSheetData("car1.png")->neighborCount;
+	status.pop = false;
+	carCount = GetSheetData("car")->tileCount;
 }
 
 
 // Update // Control the program flow with the return value (has deltaTime)
 UPDATE_STATE(SelectCar)
 {
+	// Car selection
+	int1 nav = IsKeyPressed(KEY_D) - IsKeyPressed(KEY_A);
+	selection = (selection + nav);
+
+	// Control state flow
+	if (EscapeInput()) status.pop = true;
 	return &status;
 }
 
@@ -28,19 +38,19 @@ PAUSE_STATE(SelectCar)
 // Draw // Generic draw function runs directly after update
 DRAW_STATE(SelectCar)
 {
-	uint2 stash = carCount;
 	int4 offset = 0;
-	for (int i = 0; i < carCount; i++)
+	// TODO: modify this code to match the filename indexing after fixing it
+	for (int i = 1; i < carCount + 1; i++)
 	{
-		char file[32] = IDENTIFIER;
-		strcat(strcat(file, TextFormat("%d", i)), ".png");
-		if (!DrawSheetSection(file, (Vector2){ GetScreenWidth() * .5f + offset, GetScreenHeight() * .5f }, (Vector2){ 0, 0 }, .0f, WHITE))
-		{
-			carCount++;
-		}
-		offset += 128;
+		char file[32];
+		strcpy(file, TextFormat(IDENTIFIER, i));
+		SimpleDrawSheet
+		(
+			file, (Vector2){ GetScreenWidth() * .5f + offset + margin * selection, GetScreenHeight() * .5f},
+			.0f, 1.0f, WHITE
+		);
+		offset += margin;
 	}
-	carCount = stash;
 }
 
 

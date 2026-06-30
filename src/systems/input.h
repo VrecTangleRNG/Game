@@ -9,7 +9,7 @@
 // Function declaration //
 // universal input
 bool EnterInput(void);
-bool PauseInput(void);
+bool EscapeInput(void);
 
 // Car player control
 bool AccelerateInput(void);

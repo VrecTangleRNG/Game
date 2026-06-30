@@ -44,7 +44,7 @@ void InitPlayer(b2Vec2 initPos, float initAngle)
 
 	// Loading car texture and its information
 	strcpy(car.textureFile, "car1.png");
-	car.textureData = GetSheetData(car.textureFile);
+	car.textureData = GetTileData(car.textureFile);
 	carExtent.x = car.textureData->rect.width * 0.5f;
 	carExtent.y = car.textureData->rect.height * 0.5f;
 
@@ -166,7 +166,7 @@ void DrawPlayer(void)
 	DrawSheetSection
 	(
 		car.textureFile, B2vecToRlvec(carPosEdge),
-		Vector2Zero(), carAngle, WHITE
+		Vector2Zero(), carAngle, 1.0f, WHITE
 	);
 
 	// Draw car's tire

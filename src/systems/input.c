@@ -11,7 +11,7 @@ bool EnterInput(void)
     return IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_ENTER);
 }
 
-bool PauseInput(void)
+bool EscapeInput(void)
 {
     return IsKeyPressed(KEY_ESCAPE);
 }
