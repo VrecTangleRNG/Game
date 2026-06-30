@@ -1,9 +1,10 @@
 /* MAKE AN ACTUAL INTRODUCTORY LINES */
 
 /*
-	NOTES: before reading source files any further...
-	- char *params in function that accepts filename follows this rule:
+	NOTE: before reading source files any further...
+	- char *params in function arguments that accepts filename follows this rule:
 		[absPath->originate from root, xFile->have .ext, xFilename->doesn't have .ext]
+	- TODO: fix car numbering (should start at 0) and in selectCarState.c
 */
 
 
