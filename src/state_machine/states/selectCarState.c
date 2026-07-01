@@ -2,11 +2,10 @@
 static StateStatus status = { STATE_CONTINUE, false, false };
 
 #define IDENTIFIER "car%d.png"
+#define H_MARGIN 200
 static uint2 carCount = 0;
-static int2 margin = 200;
 static int2 selection = 0;
 static int2 selected = 0;
-static char file[16];
 
 
 // Initialize // Runs only once at directly before game loop
@@ -25,8 +24,7 @@ UPDATE_STATE(SelectCar)
 	selection = abs((selection + nav) % carCount);
 
 	// Selected car
-	strcpy(file, TextFormat(IDENTIFIER, selection + 1 /* TODO: remove 1 when texture numebering was fixed */));
-	if (EnterInput()) selected = selection + 1;
+	if (EnterInput()) selected = selection;
 
 	// Control state flow
 	if (EscapeInput()) status.pop = true;
@@ -44,25 +42,37 @@ PAUSE_STATE(SelectCar)
 // Draw // Generic draw function runs directly after update
 DRAW_STATE(SelectCar)
 {
-	int4 offset = 0;
-	float size;
-	// TODO: modify this code to match the filename indexing after fixing it
-	for (int i = 1; i < carCount + 1; i++)
+	static char targetFile[16];
+	int4 carOffset = 0;
+	float carSize = 1.0f;
+	// TODO: modify this code to match the filename indexing after fixing it (remove +1 and -1)
+	for (int i = 1; i < carCount +1; i++)
 	{
-		char currentFile[16];
-		strcpy(currentFile, TextFormat(IDENTIFIER, i));
-		if (strcmp(file, currentFile) == 0) size = 1.5f;
-		else size = 1.0f;
+		strcpy(targetFile, TextFormat(IDENTIFIER, i));
+		if (selection == i -1)
+		{
+			carSize = 1.5f;
+			if (selection == selected) DrawText
+			(
+				"Selected", GetScreenWidth() * .25f,
+				GetScreenHeight() * .5f - 100, 50, BLACK
+			);
+		}
+		else carSize = 1.0f;
 		SimpleDrawSheet
 		(
-			currentFile, (Vector2){ GetScreenWidth() * .5f + offset - margin * selection, GetScreenHeight() * .5f},
-			.0f, size, WHITE
+			targetFile, (Vector2)
+			{
+				GetScreenWidth() * .5f + carOffset - H_MARGIN * selection,
+				GetScreenHeight() * .5f
+			},
+			.0f, carSize, WHITE
 		);
-		offset += margin;
+		carOffset += H_MARGIN;
 	}
 	DrawText("^", GetScreenWidth() * .5f, GetScreenHeight() * .5f + 40, 50, BLACK);
-	DrawText("Select car using A KEY or D KEY", 40, GetScreenHeight() * .5f + margin, 40, BLACK);
-	DrawText("Press ESCAPE to exit", 40, GetScreenHeight() * .5f + margin + 50, 40, BLACK);
+	DrawText("Select car using A KEY or D KEY", 40, GetScreenHeight() * .5f + H_MARGIN, 40, BLACK);
+	DrawText("Press ESCAPE to exit", 40, GetScreenHeight() * .5f + H_MARGIN + 50, 40, BLACK);
 }
 
 
