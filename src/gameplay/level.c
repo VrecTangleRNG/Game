@@ -135,7 +135,7 @@ void RunLapTracker(LapTracker *lap, Level *level, b2ShapeId *targetShape)
         lap->firstIteration = true;
         lap->currentCpIndex = (lap->currentCpIndex + 1) % (level->cpIdCount - 1);
         lap->currentCp = level->checkpointIds[lap->currentCpIndex];
-        printf("cpIdCount: %d\n", level->cpIdCount);
+        // printf("cpIdCount: %d\n", level->cpIdCount);
         // printf("After: currentLap: %d, currentCp: %d, currentCpIndex: %d\n\n", lap->currentLap, lap->currentCp, lap->currentCpIndex);
     }
 }

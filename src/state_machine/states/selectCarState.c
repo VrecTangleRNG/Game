@@ -6,8 +6,16 @@ static StateStatus status = { STATE_CONTINUE, false, false };
 static uint2 carCount = 0;
 static uint1 selection = 0;
 static uint1 selected = 0;
-static char *carData = NULL;
+/*
+	NOTE:
+	buffer[0] = represents position index in the self array that points to curently selected car
+	buffer[1] = represents how many cars does the player owns (N)
+	buffer[2 ~ N] = list of car ids of owned cars
+*/
+// TODO: make buffer dynamic
 static uint4 totalBytes = 0;
+static uint1 *carData = NULL;
+static uint1 *buffer;
 
 
 // Initialize // Runs only once at directly before game loop
@@ -18,7 +26,8 @@ INIT_STATE(SelectCar)
 
 	// Load player data on cars
 	carData = LoadFileData("app/car.dat", &totalBytes);
-	selected = carData[0];
+	selected = carData[0] - 2;
+	buffer = carData;
 }
 
 
@@ -27,19 +36,18 @@ UPDATE_STATE(SelectCar)
 {
 	// Car selection control
 	int1 nav = IsKeyPressed(KEY_D) - IsKeyPressed(KEY_A);
-	selection = abs((selection + nav) % carCount);
+	selection = abs((selection + nav) % carData[1]);
 
 	// Selected car
 	if (EnterInput())
 	{
 		selected = selection;
-		SaveFileData("app/car.dat", &selected, sizeof(int1));
+		buffer[0] = 2 + selection;
 	}
 
 	// Control state flow
 	if (EscapeInput())
 	{
-		UnloadFileData(carData);
 		status.pop = true;
 	}
 	return &status;
@@ -60,13 +68,14 @@ DRAW_STATE(SelectCar)
 	int4 carOffset = 0;
 	float carSize = 1.0f;
 	// TODO: modify this code to match the filename indexing after fixing it (remove +1 and -1)
-	for (int i = 1; i < carCount +1; i++)
+	for (int i = 0 +1; i < carData[1] +1; i++)
 	{
-		strcpy(targetFile, TextFormat(IDENTIFIER, i));
+		strcpy(targetFile, TextFormat(IDENTIFIER, carData[2 + i -1] +1));
+		// printf("%d\n", buffer[2 + i -1]);
 		if (selection == i -1)
 		{
 			carSize = 1.5f;
-			if (selection == selected) DrawText
+			if (selected == i -1) DrawText
 			(
 				"Selected", GetScreenWidth() * .25f,
 				GetScreenHeight() * .5f - 100, 50, BLACK
@@ -93,5 +102,6 @@ DRAW_STATE(SelectCar)
 // Exit // Do clean ups before continue to the next state
 EXIT_STATE(SelectCar)
 {
-	return;
+	SaveFileData("app/car.dat", buffer, sizeof(buffer));
+	UnloadFileData(carData);
 }
