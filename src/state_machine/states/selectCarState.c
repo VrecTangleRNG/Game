@@ -4,8 +4,10 @@ static StateStatus status = { STATE_CONTINUE, false, false };
 #define IDENTIFIER "car%d.png"
 #define H_MARGIN 200
 static uint2 carCount = 0;
-static int2 selection = 0;
-static int2 selected = 0;
+static uint1 selection = 0;
+static uint1 selected = 0;
+static char *carData = NULL;
+static uint4 totalBytes = 0;
 
 
 // Initialize // Runs only once at directly before game loop
@@ -13,6 +15,10 @@ INIT_STATE(SelectCar)
 {
 	status.pop = false;
 	carCount = GetSheetData("car")->tileCount;
+
+	// Load player data on cars
+	carData = LoadFileData("app/car.dat", &totalBytes);
+	selected = carData[0];
 }
 
 
@@ -24,10 +30,18 @@ UPDATE_STATE(SelectCar)
 	selection = abs((selection + nav) % carCount);
 
 	// Selected car
-	if (EnterInput()) selected = selection;
+	if (EnterInput())
+	{
+		selected = selection;
+		SaveFileData("app/car.dat", &selected, sizeof(int1));
+	}
 
 	// Control state flow
-	if (EscapeInput()) status.pop = true;
+	if (EscapeInput())
+	{
+		UnloadFileData(carData);
+		status.pop = true;
+	}
 	return &status;
 }
 

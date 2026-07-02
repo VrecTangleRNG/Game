@@ -43,7 +43,9 @@ void InitPlayer(b2Vec2 initPos, float initAngle)
 	car.bodyId = b2CreateBody(GetWorldId(), &bodyDef);
 
 	// Loading car texture and its information
-	strcpy(car.textureFile, "car1.png");
+	int4 totalBytes;
+	char *carData = LoadFileData("app/car.dat", &totalBytes);
+	strcpy(car.textureFile, TextFormat("car%d.png", carData[0] +1));
 	car.textureData = GetTileData(car.textureFile);
 	carExtent.x = car.textureData->rect.width * 0.5f;
 	carExtent.y = car.textureData->rect.height * 0.5f;
@@ -75,6 +77,9 @@ void InitPlayer(b2Vec2 initPos, float initAngle)
 
 	// Set initial car state
 	playerControl = 1;
+
+	// unload any memory
+	UnloadFileData(carData);
 }
 
 void UpdatePlayer(float deltaTime)
