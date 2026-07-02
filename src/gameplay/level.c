@@ -64,6 +64,7 @@ void LoadCurrentLevel(char *tilemapFile, char *levelFile)
                 }
 
                 // Save the values from json to level container
+                levels[levelIndex].cpIdCount = 0;
                 for (int i = 0; i < checkpointCount; i++)
                 {
                     int cpId = cJSON_GetArrayItem(checkpoints, i)->valueint;
@@ -91,7 +92,7 @@ void LoadCurrentLevel(char *tilemapFile, char *levelFile)
 
 void SetRunningLevelIndex(int levelIndex)
 {
-    runningLevel = &(levels[levelIndex]);
+    runningLevel = levels + levelIndex;
 }
 
 Level *GetRunningLevel(void)
@@ -126,15 +127,16 @@ void RunLapTracker(LapTracker *lap, Level *level, b2ShapeId *targetShape)
     b2ShapeId *targetCpShape = GetCpShapeFromId(lap->currentCp);
     if (cpShape != NULL && B2_ID_EQUALS(*cpShape, *targetCpShape))
     {
-        //printf("Before: currentLap: %d, currentCp: %d, currentCpIndex: %d\n", lap->currentLap, lap->currentCp, lap->currentCpIndex);
+        // printf("Before: currentLap: %d, currentCp: %d, currentCpIndex: %d\n", lap->currentLap, lap->currentCp, lap->currentCpIndex);
         if (lap->currentCpIndex == 0 && lap->firstIteration)
         {
             lap->currentLap++;
         }
         lap->firstIteration = true;
-        lap->currentCpIndex = (lap->currentCpIndex + 1) % level->cpIdCount;
+        lap->currentCpIndex = (lap->currentCpIndex + 1) % (level->cpIdCount - 1);
         lap->currentCp = level->checkpointIds[lap->currentCpIndex];
-        //printf("After: currentLap: %d, currentCp: %d, currentCpIndex: %d\n", lap->currentLap, lap->currentCp, lap->currentCpIndex);
+        printf("cpIdCount: %d\n", level->cpIdCount);
+        // printf("After: currentLap: %d, currentCp: %d, currentCpIndex: %d\n\n", lap->currentLap, lap->currentCp, lap->currentCpIndex);
     }
 }
 /* --- ----------------------------- --- */

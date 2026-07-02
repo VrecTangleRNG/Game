@@ -11,11 +11,13 @@ INCLUDES = include
 LIBS = lib -lraylib -lgdi32 -lwinmm -lbox2d -lm
 
 TARGET = o.exe
-D_TARGET = d.exe
+TARGETDIR = app
 
+# TODO: $(TARGETDIR)/$(TARGET) : $(OBJS)
 $(TARGET) : $(OBJS)
 	@echo "Compiling $(TARGET)..."
 	@$(CC) $(CFLAGS) $(cJSON) $(OBJS) -o $(TARGET) -I $(INCLUDES) -L $(LIBS)
+	# TODO: @mv $(TARGET) $(TARGETDIR)/$(TARGET)
 	@echo "$(TARGET) created successfuly"
 
 # Compile all source files into object files
