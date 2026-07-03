@@ -7,7 +7,8 @@ static char blink = 0;
 // Initialize // Runs only once at directly before game loop
 INIT_STATE(GetReady)
 {
-	return;
+	status.state = STATE_CONTINUE;
+	status.replace = false;
 }
 
 

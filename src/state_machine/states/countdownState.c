@@ -7,7 +7,7 @@ static Countdown *countdown = NULL;
 // Initialize // Runs only once at directly before game loop
 INIT_STATE(Countdown)
 {
-	return;
+	status.pop = false;
 }
 
 

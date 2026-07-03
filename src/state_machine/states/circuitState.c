@@ -34,6 +34,7 @@ INIT_STATE(Circuit)
 	SetCameraPos(&playerPos);
 
 	// Initialize lap time
+	firstTimeEnter = true;
 	playerLapTimer = InitStopwatch("plyr");
 }
 
@@ -133,5 +134,5 @@ DRAW_STATE(Circuit)
 // Exit // Do clean ups before continue to the next state
 EXIT_STATE(Circuit)
 {
-	return;
+	CleanTimeStorage();
 }

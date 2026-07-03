@@ -14,10 +14,11 @@ INIT_STATE(Paused)
 // Update // Control the program flow with the return value (has deltaTime)
 UPDATE_STATE(Paused)
 {
-	if (EnterInput())
+	if (EnterInput()) status.pop = true;
+	if (EscapeInput())
 	{
-		status.state = STATE_CIRCUIT;
 		status.pop = true;
+		status.dives = 2;
 	}
 	return &status;
 }
