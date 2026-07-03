@@ -34,7 +34,8 @@ PAUSE_STATE(Paused)
 DRAW_STATE(Paused)
 {
 	DrawText("PAUSED", 20, GetScreenHeight() * .5f - 25, 50, WHITE);
-	DrawText("Click ENTER/SPACE to Resume", 20, GetScreenHeight() * .5f + 15, 30, WHITE);
+	DrawText("Click ENTER/SPACE to Resume", 20, GetScreenHeight() * .5f + 25, 30, WHITE);
+	DrawText("Click ESCAPE to Go Back to Main Menu (UNDONE)", 20, GetScreenHeight() * .5f + 60, 30, WHITE);
 	return;
 }
 

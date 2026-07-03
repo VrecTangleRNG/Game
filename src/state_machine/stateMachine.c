@@ -9,6 +9,7 @@
 static StateStatus upcomingStateStat = {STATE_BASE, false, false};
 static States *currentState = NULL;
 static Deque *stateDeque = NULL;	// TODO: not yet freed
+static uint1 switchCondition;
 /* --- ----------------------- --- */
 
 
@@ -30,6 +31,7 @@ int RunStateStack(void)
 		// Update head
 		UpdateGameTime();
 		upcomingStateStat = *((States *)stateDeque->front->valueptr)->update(GetVirtualTime()->delta);
+		switchCondition = (upcomingStateStat.replace * REPLACE) | (upcomingStateStat.pop * POP);
 
 		// Pause tails
 		DLL *layer = stateDeque->front;
@@ -49,29 +51,14 @@ int RunStateStack(void)
 		}
 		EndDrawing();
 
-		// If none of this was run, continue the loop
-		// TODO: this was unoptimized
-		if (upcomingStateStat.pop)
+		// Control state flow
+		if (switchCondition & (REPLACE | POP))
 		{
-			// Pop state and run state underneath it
 			((States *)(stateDeque->front->valueptr))->exit();
 			PopFrontDq(&stateDeque);
-			continue;
 		}
-		if (upcomingStateStat.state != STATE_CONTINUE)
-		{
-			// Replace the head by poping head and pushing a new one
-			if (upcomingStateStat.replace)
-			{
-				((States *)(stateDeque->front->valueptr))->exit();
-				PopFrontDq(&stateDeque);
-			}
-
-			// Push new state
-			break;
-		}
-
-		// Check for exit condition
+		if (switchCondition & POP) continue;
+		if (upcomingStateStat.state != STATE_CONTINUE) break;
 		if (WindowShouldClose()) return 0;
 	}
 	return 1;

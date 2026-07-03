@@ -30,13 +30,13 @@ UPDATE_STATE(MainMenu)
 	selection = (selection == 255) ? MENU_COUNT - 1 : selection % MENU_COUNT;
 
 	// Send signal to machine on player pressed enter key
+	status.state = STATE_CONTINUE;
 	if (EnterInput())
 	{
 		switch (selection)
 		{
 			case PLAY:
 				status.state = STATE_CIRCUIT;
-				status.replace = true;
 				break;
 
 			case CAR_SELECT:
@@ -54,7 +54,6 @@ UPDATE_STATE(MainMenu)
 // Pause // Do something in background
 PAUSE_STATE(MainMenu)
 {
-	status.state = STATE_CONTINUE;
 	return;
 }
 
@@ -63,9 +62,10 @@ PAUSE_STATE(MainMenu)
 DRAW_STATE(MainMenu)
 {
 	ClearBackground(GRAY);
-	DrawText(TextFormat("%sPlay", (selection == PLAY) ? ">> " : ""), 20, 30, 30, BLACK);
+	if (status.state != STATE_CONTINUE) return;
 	DrawText(TextFormat("%sCar Select", (selection == CAR_SELECT) ? ">> " : ""), 20, 70, 30, BLACK);
 	DrawText(TextFormat("%sQuit", (selection == QUIT) ? ">> " : ""), 20, 110, 30, BLACK);
+	DrawText(TextFormat("%sPlay", (selection == PLAY) ? ">> " : ""), 20, 30, 30, BLACK);
 }
 
 // Exit // Do clean ups before continue to the next state

@@ -70,7 +70,8 @@ void LoadCurrentLevel(char *tilemapFile, char *levelFile)
                     int cpId = cJSON_GetArrayItem(checkpoints, i)->valueint;
                     levels[levelIndex].checkpointIds[i] = cpId;
                     levels[levelIndex].cpIdCount++;
-                    // DEBUG: printf("cpId: %d, i: %d\n", levels[levelIndex].checkpointIds[i], i);
+                    // DEBUG: before diving any further
+                    // printf("cpId: %d, i: %d\n", levels[levelIndex].checkpointIds[i], i);
                 }
                 levels[levelIndex].mode = type->valueint;
                 levels[levelIndex].angle = angle->valuedouble;
