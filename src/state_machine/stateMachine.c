@@ -6,7 +6,7 @@
 
 /* --- Global static variables --- */
 
-static StateStatus upcomingStateStat = {STATE_BASE, false, false};
+static StateStatus upcomingStateStat = {STATE_BASE, false, false, 0};
 static States *currentState = NULL;
 static Deque *stateDeque = NULL;	// TODO: not yet freed
 static uint1 switchCondition;
@@ -54,8 +54,11 @@ int RunStateStack(void)
 		// Control state flow
 		if (switchCondition & (REPLACE | POP))
 		{
-			((States *)(stateDeque->front->valueptr))->exit();
-			PopFrontDq(&stateDeque);
+			for (int i = 0; i < upcomingStateStat.dives; i++)
+			{
+				((States *)(stateDeque->front->valueptr))->exit();
+				PopFrontDq(&stateDeque);
+			}
 		}
 		if (switchCondition & POP) continue;
 		if (upcomingStateStat.state != STATE_CONTINUE) break;

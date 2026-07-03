@@ -84,6 +84,7 @@ typedef struct
 	StateIndex state;
 	bool replace;
 	bool pop;
+	uint1 dives;
 } StateStatus;
 
 typedef struct

@@ -1,5 +1,5 @@
 #include "../stateList.h"
-static StateStatus status = { STATE_CONTINUE, false, false };
+static StateStatus status = { STATE_CONTINUE, false, false, 1 };
 
 static Countdown *countdown = NULL;
 
