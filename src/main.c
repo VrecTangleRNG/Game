@@ -32,5 +32,6 @@ int main(void)
 	TimerInit(FPS, 1.0f);
 	while (RunStateStack());	// CRITICAL POINT IMMINENT
 	CloseWindow();
+	printf("Exited Successfully\n");
 	return 0;
 }

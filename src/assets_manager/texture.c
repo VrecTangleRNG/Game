@@ -109,8 +109,12 @@ uint1 DrawSheetSection(char *file, Vector2 pos, Vector2 origin, float rot, float
 
 void FreeTexture(char *filename)
 {
-	SheetData *buffer = (SheetData *)SearchTrie(sheetDatas, filename);
+	char *tempstr = malloc(sizeof(filename) + 1);
+	if (!tempstr) return;
+	TruncateString(strcpy(tempstr, filename), -6);
+	SheetData *buffer = (SheetData *)SearchTrie(sheetDatas, tempstr);
 	if (buffer) UnloadTexture(buffer->sheet);
+	free(tempstr);
 }
 
 void ClearTextures(void)

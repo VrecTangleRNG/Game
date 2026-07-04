@@ -22,7 +22,6 @@ UPDATE_STATE(Welcome)
 	if (EnterInput())
 	{
 		status.state = STATE_MAIN_MENU;
-		status.replace = true;
 	}
 	return &status;
 }
@@ -38,6 +37,7 @@ PAUSE_STATE(Welcome)
 // Draw // Generic draw function runs directly after update
 DRAW_STATE(Welcome)
 {
+	if (status.state != STATE_CONTINUE) return;
 	ClearBackground(GRAY);
 	DrawText("Welcome to the game!", 40, GetScreenHeight() * .4f - 40, 40, BLACK);
 	DrawText("Press SPACE to continue", 40, GetScreenHeight() * .75f - 25, 25, (Color){ 0, 0, 0, transparency });
@@ -47,5 +47,8 @@ DRAW_STATE(Welcome)
 // Exit // Do clean ups before continue to the next state
 EXIT_STATE(Welcome)
 {
-	return;
+	FreeTexture("building_sheet");
+	FreeTexture("car_sheet");
+	FreeTexture("props_sheet");
+	ClearTextures();
 }

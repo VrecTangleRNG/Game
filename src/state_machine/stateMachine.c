@@ -62,7 +62,16 @@ int RunStateStack(void)
 		}
 		if (switchCondition & POP) continue;
 		if (upcomingStateStat.state != STATE_CONTINUE) break;
-		if (WindowShouldClose()) return 0;
+		if (WindowShouldClose())
+		{
+			for (int i = 0, stateCount = stateDeque->count; i < stateCount; i++)
+			{
+				((States *)(stateDeque->front->valueptr))->exit();
+				PopFrontDq(&stateDeque);
+			}
+			free(stateDeque);
+			return 0;
+		}
 	}
 	return 1;
 }
