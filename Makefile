@@ -16,23 +16,23 @@ TARGETDIR = app
 # TODO: $(TARGETDIR)/$(TARGET) : $(OBJS)
 $(TARGET) : $(OBJS)
 	@echo "Compiling $(TARGET)..."
-	@$(CC) $(CFLAGS) $(cJSON) $(OBJS) -o $(TARGET) -I $(INCLUDES) -L $(LIBS)
+	@$(CC) $(CFLAGS) $(cJSON) $(OBJS) -o $(TARGET) -I $(INCLUDES) -L $(LIBS) -g
 	# TODO: @mv $(TARGET) $(TARGETDIR)/$(TARGET)
 	@echo "$(TARGET) created successfuly"
 
 # Compile all source files into object files
 
-$(OBJ_PATH)%.o : src/%.c ; @echo "Updating $@" && $(CC) -c $< -o $@ -I $(INCLUDES)
+$(OBJ_PATH)%.o : src/%.c ; @echo "Updating $@" && $(CC) -c $< -o $@ -I $(INCLUDES) -g
 
-$(OBJ_PATH)%.o : src/assets_manager/%.c ; @echo "Updating $@" && $(CC) -c $< -o $@ -I $(INCLUDES)
+$(OBJ_PATH)%.o : src/assets_manager/%.c ; @echo "Updating $@" && $(CC) -c $< -o $@ -I $(INCLUDES) -g
 
-$(OBJ_PATH)%.o : src/gameplay/%.c ; @echo "Updating $@" && $(CC) -c $< -o $@ -I $(INCLUDES)
+$(OBJ_PATH)%.o : src/gameplay/%.c ; @echo "Updating $@" && $(CC) -c $< -o $@ -I $(INCLUDES) -g
 
-$(OBJ_PATH)%.o : src/systems/%.c ; @echo "Updating $@" && $(CC) -c $< -o $@ -I $(INCLUDES)
+$(OBJ_PATH)%.o : src/systems/%.c ; @echo "Updating $@" && $(CC) -c $< -o $@ -I $(INCLUDES) -g
 
-$(OBJ_PATH)%.o : src/state_machine/%.c ; @echo "Updating $@" && $(CC) -c $< -o $@ -I $(INCLUDES)
+$(OBJ_PATH)%.o : src/state_machine/%.c ; @echo "Updating $@" && $(CC) -c $< -o $@ -I $(INCLUDES) -g
 
-$(OBJ_PATH)%.o : src/state_machine/states/%.c ; @echo "Updating $@" && $(CC) -c $< -o $@ -I $(INCLUDES)
+$(OBJ_PATH)%.o : src/state_machine/states/%.c ; @echo "Updating $@" && $(CC) -c $< -o $@ -I $(INCLUDES) -g
 
 
 clear:

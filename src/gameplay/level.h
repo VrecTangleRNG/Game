@@ -33,7 +33,6 @@ typedef struct
     uint1 currentLap;
     bool firstIteration;
     uint1 currentCpIndex;
-    uint2 currentCp;
 } LapTracker;
 
 // Global gamemode module
@@ -44,6 +43,6 @@ void UnloadCurrentLevel(void);
 
 // Circuit gamemode exclusive module
 void InitLapTracker(LapTracker *lap, Level *level);
-void RunLapTracker(LapTracker * lap, Level *level, b2ShapeId *targetShape);
+void RunLapTracker(LapTracker * lap, Level *level, b2ShapeId *trackedShape);
 
 #endif

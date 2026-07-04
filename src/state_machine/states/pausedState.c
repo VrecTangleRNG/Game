@@ -7,6 +7,7 @@ INIT_STATE(Paused)
 {
 	status.state = STATE_CONTINUE;
 	status.pop = false;
+	status.dives = 1;
 	return;
 }
 

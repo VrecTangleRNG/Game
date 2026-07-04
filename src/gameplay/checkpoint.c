@@ -83,6 +83,8 @@ void DestroyCheckpoint(void)
 		b2DestroyBody(cps[i].bodyId);
 	}
 	free(cps);
+	cps = NULL;
+	cpCount = 0;
 }
 /* --- ------------ --- */
 

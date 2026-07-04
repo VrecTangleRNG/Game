@@ -107,7 +107,9 @@ void UnloadCurrentLevel(void)
     {
         free(levels[i].checkpointIds);
     }
-    free(levels);
+    if (levels) free(levels);
+    levels = NULL;
+    runningLevel = NULL;
 }
 /* --- ------------ --- */
 
@@ -119,25 +121,15 @@ void InitLapTracker(LapTracker *lap, Level *level)
     lap->currentLap = 1;
     lap->firstIteration = false;
     lap->currentCpIndex = 0;
-    lap->currentCp = level->checkpointIds[0];
 }
 
-void RunLapTracker(LapTracker *lap, Level *level, b2ShapeId *targetShape)
+void RunLapTracker(LapTracker *lap, Level *level, b2ShapeId *trackedShape)
 {
-    b2ShapeId *cpShape = CheckSensorCollision(targetShape, NULL, 1);
-    b2ShapeId *targetCpShape = GetCpShapeFromId(lap->currentCp);
+    b2ShapeId *cpShape = CheckSensorCollision(trackedShape, NULL, 1);
+    b2ShapeId *targetCpShape = GetCpShapeFromId(level->checkpointIds[lap->currentCpIndex]);
     if (cpShape != NULL && B2_ID_EQUALS(*cpShape, *targetCpShape))
     {
-        // printf("Before: currentLap: %d, currentCp: %d, currentCpIndex: %d\n", lap->currentLap, lap->currentCp, lap->currentCpIndex);
-        if (lap->currentCpIndex == 0 && lap->firstIteration)
-        {
-            lap->currentLap++;
-        }
-        lap->firstIteration = true;
-        lap->currentCpIndex = (lap->currentCpIndex + 1) % (level->cpIdCount - 1);
-        lap->currentCp = level->checkpointIds[lap->currentCpIndex];
-        // printf("cpIdCount: %d\n", level->cpIdCount);
-        // printf("After: currentLap: %d, currentCp: %d, currentCpIndex: %d\n\n", lap->currentLap, lap->currentCp, lap->currentCpIndex);
+        printf("Collision detected!\n");
     }
 }
 /* --- ----------------------------- --- */

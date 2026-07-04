@@ -52,7 +52,7 @@ void LoadMap(char *tilemapFile)
 		tileCount += cJSON_GetArraySize(tiles);
 
 		// Allocate memory to holds all tiles data
-		if (ts == NULL)
+		if (!ts)
 		{
 			ts = malloc(tileCount * sizeof(Tile));
 			if (ts == NULL) {printf("Memory error (tileset)\n"); return;}
@@ -216,7 +216,7 @@ void PlaceObjects(void)
 		if (strcmp(tm.layers[lIndex].layerName, "graphics") == 0)
 		{
 			// Alocate memory to store body ids
-			if (bodyIds == NULL)
+			if (!bodyIds)
 			{
 				bodyIds = malloc(tm.layers[lIndex].objectCount * sizeof(b2BodyId));
 				if (bodyIds == NULL) printf("Can't allocate memory (bodyIds)\n");
@@ -339,7 +339,9 @@ void FreeMapDatas(void)
 		free(ts[i].tileType);
 		free(ts[i].hitboxes);
 	}
-	free(ts);
+	if (ts) free(ts);
+	ts = NULL;
+	tileCount = 0;
 
 	// Free tilemap which loaded to memory
 	free(tm.firstgids);
@@ -358,12 +360,15 @@ void DestroyMapBodies(void)
 	{
 		b2DestroyBody(bodyIds[i]);
 	}
+	bodyIds = NULL;
+	bodyCount = 0;
 
 	// Free checkpoint
 	DestroyCheckpoint();
 
 	// Free all spawnpoints
-	free(sps);
+	if (sps) free(sps);
+	sps = NULL;
 }
 /* --- ------------ --- */
 

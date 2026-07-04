@@ -27,6 +27,7 @@ INIT_STATE(Circuit)
 
 	// Initialize player
 	InitLapTracker(&playerLap, level);
+	// TODO: somehow, after repeatedly entering and quiting game, it fail to load initpos
 	InitPlayer(GetSpawnpoint(level->spawnpointId).pos, level->angle);
 
 	// Set initial camera focus
@@ -66,6 +67,16 @@ UPDATE_STATE(Circuit)
 	// Set progress that the player has made
 	RunLapTracker(&playerLap, GetRunningLevel(), GetPlayerShape());
 
+	// DEBUG
+	// static float timer = .0f;
+	// timer += deltaTime;
+	// if (timer >= 1.5f)
+	// {
+	// 	printf("cl: %d, fi: %d\n", playerLap.currentLap, playerLap.firstIteration);
+	// 	printf("ccpi: %d\n\n", playerLap.currentCpIndex);
+	// 	timer = .0f;
+	// }
+
 	// Control state flow
 	if (playerLap.currentLap > 3)	status.state = STATE_FINISHED;
 	if (EscapeInput()) 				status.state = STATE_PAUSED;
@@ -96,6 +107,7 @@ DRAW_STATE(Circuit)
 	BeginMode2D(GetCamera());
 	DrawMap();
 	DrawPlayer();
+	DrawRectangle(0, 0, 100, 100, BLUE);
 	EndMode2D();
 
 	// Control ui behaviour during some state
@@ -135,4 +147,7 @@ DRAW_STATE(Circuit)
 EXIT_STATE(Circuit)
 {
 	CleanTimeStorage();
+	FreeMapDatas();
+	DestroyMapBodies();
+	UnloadCurrentLevel();
 }
