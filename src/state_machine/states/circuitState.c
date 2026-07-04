@@ -72,7 +72,7 @@ UPDATE_STATE(Circuit)
 	// timer += deltaTime;
 	// if (timer >= 1.5f)
 	// {
-	// 	printf("cl: %d, fi: %d\n", playerLap.currentLap, playerLap.firstIteration);
+	// 	printf("cl: %d\n", playerLap.currentLap);
 	// 	printf("ccpi: %d\n\n", playerLap.currentCpIndex);
 	// 	timer = .0f;
 	// }

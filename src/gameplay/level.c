@@ -119,17 +119,25 @@ void UnloadCurrentLevel(void)
 void InitLapTracker(LapTracker *lap, Level *level)
 {
     lap->currentLap = 1;
-    lap->firstIteration = false;
     lap->currentCpIndex = 0;
 }
 
 void RunLapTracker(LapTracker *lap, Level *level, b2ShapeId *trackedShape)
 {
     b2ShapeId *cpShape = CheckSensorCollision(trackedShape, NULL, 1);
-    b2ShapeId *targetCpShape = GetCpShapeFromId(level->checkpointIds[lap->currentCpIndex]);
+    b2ShapeId *targetCpShape = GetCpShapeFromId
+    (
+        level->checkpointIds[lap->currentCpIndex % level->cpIdCount]
+    );
     if (cpShape != NULL && B2_ID_EQUALS(*cpShape, *targetCpShape))
     {
-        printf("Collision detected!\n");
+        // printf("CPi: %d\n", lap->currentCpIndex);
+        if (lap->currentCpIndex == level->cpIdCount)
+        {
+            lap->currentLap++;
+            lap->currentCpIndex = 0;
+        }
+        lap->currentCpIndex++;
     }
 }
 /* --- ----------------------------- --- */

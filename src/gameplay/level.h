@@ -31,8 +31,7 @@ typedef struct
 typedef struct
 {
     uint1 currentLap;
-    bool firstIteration;
-    uint1 currentCpIndex;
+    uint2 currentCpIndex;
 } LapTracker;
 
 // Global gamemode module
