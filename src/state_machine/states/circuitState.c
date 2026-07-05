@@ -150,4 +150,5 @@ EXIT_STATE(Circuit)
 	FreeMapDatas();
 	DestroyMapBodies();
 	UnloadCurrentLevel();
+	b2DestroyWorld(GetWorldId());
 }

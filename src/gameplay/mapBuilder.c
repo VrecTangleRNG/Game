@@ -201,6 +201,7 @@ void PlaceObjects(void)
 {
 	// Initialize physical properties template before entering creation loop
 	b2BodyDef bodyDef = b2DefaultBodyDef();
+	bodyDef.position = (b2Vec2){ .0f, .0f };
 	bodyDef.isAwake = false;
 	bodyDef.type = b2_staticBody;
 	b2ShapeDef shapeDef = b2DefaultShapeDef();

@@ -44,7 +44,8 @@
 	X(STATE_COUNTDOWN, Countdown, cndn)\
 	X(STATE_FINISHED, Finished, fnsd)\
 	X(STATE_PAUSED, Paused, paus)\
-	X(STATE_SELECT_CAR, SelectCar, scar)
+	X(STATE_SELECT_CAR, SelectCar, scar)\
+	X(STATE_EXIT, Exit, exit)
 
 #define INIT_STATE(function) void Init_##function##_(void)
 #define UPDATE_STATE(function) StateStatus *Update_##function##_(float deltaTime)
@@ -70,6 +71,7 @@
 typedef enum
 {
 	STATE_CONTINUE = 255,
+	QUIT_REQUEST = 254,
 	STATE_BASE = 0,
 
 	#define X(enum, function, string) enum,

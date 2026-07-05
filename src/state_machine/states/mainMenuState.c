@@ -44,6 +44,7 @@ UPDATE_STATE(MainMenu)
 				break;
 
 			case QUIT:
+				status.state = STATE_EXIT;
 				break;
 		}
 	}
@@ -62,7 +63,7 @@ PAUSE_STATE(MainMenu)
 DRAW_STATE(MainMenu)
 {
 	ClearBackground(GRAY);
-	if (status.state != STATE_CONTINUE) return;
+	if (status.state != STATE_CONTINUE && status.state != STATE_EXIT) return;
 	DrawText(TextFormat("%sCar Select", (selection == CAR_SELECT) ? ">> " : ""), 20, 70, 30, BLACK);
 	DrawText(TextFormat("%sQuit", (selection == QUIT) ? ">> " : ""), 20, 110, 30, BLACK);
 	DrawText(TextFormat("%sPlay", (selection == PLAY) ? ">> " : ""), 20, 30, 30, BLACK);

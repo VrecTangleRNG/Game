@@ -8,12 +8,19 @@ static Stopwatch *playerLapTime = NULL;
 INIT_STATE(Finished)
 {
 	playerLapTime = InitStopwatch("plyr");
+	status.pop = false;
+	status.dives = 1;
 }
 
 
 // Update // Control the program flow with the return value (has deltaTime)
 UPDATE_STATE(Finished)
 {
+	if (EnterInput())
+	{
+		status.pop = true;
+		status.dives = 2;
+	}
 	return &status;
 }
 
@@ -40,6 +47,7 @@ DRAW_STATE(Finished)
 		),
 		20, GetScreenHeight() * .5f + 25, 30, WHITE
 	);
+	DrawText("Press ENTER to Return to Main Menu", 20, GetScreenHeight() * .5f + 65, 30, BLACK);
 }
 
 

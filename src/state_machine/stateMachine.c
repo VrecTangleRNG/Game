@@ -52,6 +52,16 @@ int RunStateStack(void)
 		EndDrawing();
 
 		// Control state flow
+		if (upcomingStateStat.state == QUIT_REQUEST)
+		{
+			for (int i = 0, stateCount = stateDeque->count; i < stateCount; i++)
+			{
+				((States *)(stateDeque->front->valueptr))->exit();
+				PopFrontDq(&stateDeque);
+			}
+			free(stateDeque);
+			return 0;
+		}
 		if (switchCondition & (REPLACE | POP))
 		{
 			for (int i = 0; i < upcomingStateStat.dives; i++)
@@ -62,16 +72,6 @@ int RunStateStack(void)
 		}
 		if (switchCondition & POP) continue;
 		if (upcomingStateStat.state != STATE_CONTINUE) break;
-		if (WindowShouldClose())
-		{
-			for (int i = 0, stateCount = stateDeque->count; i < stateCount; i++)
-			{
-				((States *)(stateDeque->front->valueptr))->exit();
-				PopFrontDq(&stateDeque);
-			}
-			free(stateDeque);
-			return 0;
-		}
 	}
 	return 1;
 }
