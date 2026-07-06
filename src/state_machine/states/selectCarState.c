@@ -4,8 +4,8 @@ static StateStatus status = { STATE_CONTINUE, false, false, 1 };
 #define IDENTIFIER "car%d.png"
 #define H_MARGIN 200
 static uint2 carCount = 0;
-static uint1 selection = 0;
-static uint1 selected = 0;
+static int1 selection = 0;
+static int1 selected = 0;
 /*
 	NOTE:
 	buffer[0] = represents position index in the self array that points to curently selected car
@@ -36,7 +36,8 @@ UPDATE_STATE(SelectCar)
 {
 	// Car selection control
 	int1 nav = IsKeyPressed(KEY_D) - IsKeyPressed(KEY_A);
-	selection = abs((selection + nav) % carData[1]);
+	selection = (selection + nav) % carData[1];
+	selection = (selection < 0) ? carData[1] - 1 : selection; 
 
 	// Selected car
 	if (EnterInput())
