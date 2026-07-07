@@ -1,4 +1,2 @@
-o.exe
 templates.txt
-assets/
-build/
+.gitignore
