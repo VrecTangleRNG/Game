@@ -370,6 +370,7 @@ void DestroyMapBodies(void)
 	// Free all spawnpoints
 	if (sps) free(sps);
 	sps = NULL;
+	spawnCount = 0;
 }
 /* --- ------------ --- */
 

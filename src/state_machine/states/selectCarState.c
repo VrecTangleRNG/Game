@@ -25,7 +25,7 @@ INIT_STATE(SelectCar)
 	carCount = GetSheetData("car")->tileCount;
 
 	// Load player data on cars
-	carData = LoadFileData("app/car.dat", &totalBytes);
+	carData = LoadFileData("car.dat", &totalBytes);
 	selected = carData[0] - 2;
 	buffer = carData;
 }
@@ -103,6 +103,6 @@ DRAW_STATE(SelectCar)
 // Exit // Do clean ups before continue to the next state
 EXIT_STATE(SelectCar)
 {
-	SaveFileData("app/car.dat", buffer, sizeof(buffer));
+	SaveFileData("car.dat", buffer, sizeof(buffer));
 	UnloadFileData(carData);
 }

@@ -27,7 +27,6 @@ INIT_STATE(Circuit)
 
 	// Initialize player
 	InitLapTracker(&playerLap, level);
-	// TODO: somehow, after repeatedly entering and quiting game, it fail to load initpos
 	InitPlayer(GetSpawnpoint(level->spawnpointId).pos, level->angle);
 
 	// Set initial camera focus
@@ -107,7 +106,6 @@ DRAW_STATE(Circuit)
 	BeginMode2D(GetCamera());
 	DrawMap();
 	DrawPlayer();
-	DrawRectangle(0, 0, 100, 100, BLUE);
 	EndMode2D();
 
 	// Control ui behaviour during some state

@@ -28,7 +28,7 @@ void LoadTextureSheet(char *filename)
 	if (!sheets) return;
 
 	// Process JSON from (filename)
-	char *jsonString = GetStringFromFile(TextFormat("assets/metadata/%s.json", filename));
+	char *jsonString = GetStringFromFile(TextFormat("metadata/assets/%s.json", filename));
 	cJSON *json = cJSON_Parse(jsonString);
 	cJSON *frames = cJSON_GetObjectItem(json, "frames");
 	cJSON *textureName = NULL;
