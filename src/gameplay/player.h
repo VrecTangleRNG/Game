@@ -15,11 +15,18 @@
 
 typedef struct
 {
-	char textureFile[32];
-	TextureData *textureData;
-	b2BodyId bodyId;
-	b2ShapeId shapeId;
+    char textureFile[32];
+    TextureData *textureData;
+    b2BodyId bodyId;
+    b2ShapeId shapeId;
 } Car;
+
+typedef struct
+{
+    Vector2 pos;
+    Rectangle dest;
+    float angle;
+} Tire;
 
 typedef enum
 {

@@ -8,16 +8,17 @@
 
 // Global constants
 static float
-	LINEAR_DAMPING 	= 1.6f,										// Between 2.0 ~ 8.0
-	ANGULAR_DAMPING	= 14.0f,
-	DENSITY 		= 50.0f / (PX_PER_METER * PX_PER_METER),	// kg / m^2
-	TIRE_GRIP		= .85f,
+	LINEAR_DAMPING 	= 1.6f,					// Between 2.0 ~ 8.0
+	ANGULAR_DAMPING	= 16.0f,
+	DENSITY = 50.0f / (PX_PER_METER * PX_PER_METER),	// kg / m^2
+	TIRE_GRIP = .85f,
 	STEERING_SPEED	= 600.0f;
 
 // Global variables
-static Rectangle 	tireTextureData;
-static Rectangle	tireSource, tireDest;
-static Vector2		tireOrigin;
+static Texture2D 	tireTextureData;
+static Tire		tires[4];
+static Rectangle	tireSource;
+static Vector2		tireOrigin, tireFlanges;
 
 static Car car = { 0 };
 static b2Vec2 carExtent;
@@ -50,21 +51,6 @@ void InitPlayer(b2Vec2 initPos, float initAngle)
 	carExtent.x = car.textureData->rect.width * 0.5f;
 	carExtent.y = car.textureData->rect.height * 0.5f;
 
-	// Loading tire texture and its information
-	//tireTextureData =;
-	//tireSource = (Rectangle){ 0.0f, 0.0f,tireTextureData.width, tireTextureData.height };
-	//tireDest = (Rectangle){ 0.0f, 0.0f, tireTextureData.width, tireTextureData.height };
-	//tireOrigin = (Vector2){ tireTextureData.width * 0.5f, tireTextureData.height * 0.5f };
-
-	// Define physical hitbox and set up shape definition
-	b2Polygon carHitbox = b2MakeBox( carExtent.x, carExtent.y );
-	b2ShapeDef shapeDef = b2DefaultShapeDef();
-
-	// Create shapes on the body and attach user data on it
-	shapeDef.density = DENSITY;
-	shapeDef.enableSensorEvents = true;
-	car.shapeId = b2CreatePolygonShape(car.bodyId, &shapeDef, &carHitbox);
-
 	// Get player position before loop
 	carPosCenter = b2Body_GetWorldPoint(car.bodyId, (b2Vec2){ 0.0f, 0.0f });
 	carPosEdge = b2Body_GetWorldPoint
@@ -74,6 +60,39 @@ void InitPlayer(b2Vec2 initPos, float initAngle)
 	);
 	carRad = b2Rot_GetAngle(bodyDef.rotation);
 	carAngle = RAD2DEG * carRad;
+
+	// Loading tire texture and its information
+	tireTextureData = LoadTexture("assets/tire.png");
+	tireFlanges = (Vector2){ carExtent.x * .75f, carExtent.y };
+	tireSource = (Rectangle){ 0.0f, 0.0f, tireTextureData.width, tireTextureData.height };
+	tireOrigin = (Vector2){ tireTextureData.width * 0.5f, tireTextureData.height * 0.5f };
+	for (uint1 i = 0; i < 4; i++)
+	{
+	    Vector2 temp;
+	    switch(i)
+	    {
+		case 0: temp = (Vector2){ tireFlanges.x, tireFlanges.y }; break;
+		case 1: temp = (Vector2){ -tireFlanges.x, tireFlanges.y }; break;
+		case 2: temp = (Vector2){ tireFlanges.x, -tireFlanges.y }; break;
+		case 3: temp = (Vector2){ -tireFlanges.x, -tireFlanges.y }; break;
+	    }
+	    tires[i].pos = Vector2Add(B2vecToRlvec(initPos), temp);
+	    tires[i].dest = (Rectangle)
+	    {
+		tires[i].pos.x, tires[i].pos.y,
+		tireTextureData.width, tireTextureData.height
+	    };
+	    tires[i].angle = initAngle;
+	}
+
+	// Define physical hitbox and set up shape definition
+	b2Polygon carHitbox = b2MakeBox( carExtent.x, carExtent.y );
+	b2ShapeDef shapeDef = b2DefaultShapeDef();
+
+	// Create shapes on the body and attach user data on it
+	shapeDef.density = DENSITY;
+	shapeDef.enableSensorEvents = true;
+	car.shapeId = b2CreatePolygonShape(car.bodyId, &shapeDef, &carHitbox);
 
 	// Set initial car state
 	playerControl = 1;
@@ -87,6 +106,7 @@ void UpdatePlayer(float deltaTime)
 	// Control movement and rotation based on player input
 	float gasPad = (AccelerateInput() - BrakeInput()) * playerControl;
 	float steerPad = SteeringInput() * playerControl;
+
 
 	// Calculate engine force
 	float mass = b2Body_GetMass(car.bodyId);
@@ -112,7 +132,7 @@ void UpdatePlayer(float deltaTime)
 
 	// Calculate steering force
 	float steerF = .0f;
-	if (b2Length(b2Body_GetLinearVelocity(car.bodyId)) > PX_PER_METER * .3f)
+	if (b2Length(b2Body_GetLinearVelocity(car.bodyId)) > PX_PER_METER)
 	{
 		steerF = mass * 40.0f * PX_PER_METER * steerPad;
 	}
@@ -152,34 +172,72 @@ void UpdatePlayer(float deltaTime)
 		RlvecToB2vec(Vector2Add(currentVelocity, killLateral))
 	);
 
-	// Get linear and angular tranformations
+	// Control front tires direction in facing
+	b2Vec2 normalVel = b2Normalize(vel);
+	b2Rot velRotation = (b2Rot){ normalVel.x, normalVel.y };
+	float frontRad = b2Rot_GetAngle(velRotation);
+
+	// Get linear and angular tranformations of car
 	carPosCenter = b2Body_GetWorldPoint(car.bodyId, (b2Vec2){ 0.0f, 0.0f });
 	carPosEdge = b2Body_GetWorldPoint
 	(
 		car.bodyId,
 		(b2Vec2){ -carExtent.x , -carExtent.y }
 	);
-	tireDest.x = carPosEdge.x;
-	tireDest.y = carPosEdge.y;
 	carRad = b2Rot_GetAngle(b2Body_GetRotation(car.bodyId));
 	carAngle = RAD2DEG * carRad;
+	
+	// Get each tire's position
+	for (uint1 i = 0; i < 4; i++)
+	{
+	    Vector2 temp;
+	    float tempAngle;
+	    switch(i)
+	    {
+		case 0:
+		    temp = (Vector2){ tireFlanges.x, tireFlanges.y };
+		    tempAngle = carAngle;
+		    break;
+
+		case 1: 
+		    temp = (Vector2){ -tireFlanges.x, tireFlanges.y };
+		    tempAngle = (b2Length(normalVel) <= .01f) ? carAngle : frontRad * RAD2DEG;
+		    break;
+
+		case 2:
+		    temp = (Vector2){ tireFlanges.x, -tireFlanges.y };
+		    tempAngle = carAngle;
+		    break;
+
+		case 3:
+		    temp = (Vector2){ -tireFlanges.x, -tireFlanges.y };
+		    tempAngle = (b2Length(normalVel) <= .01f) ? carAngle : frontRad * RAD2DEG;
+		    break;
+	    }
+	    tires[i].pos = B2vecToRlvec(b2Body_GetWorldPoint(car.bodyId, RlvecToB2vec(temp)));
+	    tires[i].dest.x = tires[i].pos.x;
+	    tires[i].dest.y = tires[i].pos.y;
+	    tires[i].angle = tempAngle;
+	}
 }
 
 void DrawPlayer(void)
 {
-	// Draw the main car body
-	DrawSheetSection
+    for (int i = 0; i < 4; i++)
+    {
+	DrawTexturePro
 	(
-		car.textureFile, B2vecToRlvec(carPosEdge),
-		Vector2Zero(), carAngle, 1.0f, WHITE
+	    tireTextureData, tireSource, tires[i].dest,
+	    tireOrigin, tires[i].angle, WHITE
 	);
+    }
 
-	// Draw car's tire
-	//DrawTexturePro
-	//(
-	//	tireTextureData, tireSource, tireDest,
-	//	tireOrigin, tireAngle, WHITE
-	//);
+    // Draw the main car body
+    DrawSheetSection
+    (
+	car.textureFile, B2vecToRlvec(carPosEdge),
+	Vector2Zero(), carAngle, 1.0f, WHITE
+    );
 }
 /* --- ------------ --- */
 
@@ -187,12 +245,13 @@ void DrawPlayer(void)
 /* --- Methods --- */
 void SetPlayerControl(uint2 control)
 {
-	switch (control) {
-		case AUTO:		break;
-		case RELEASE:	playerControl = 0; break;
-		case HELD:		playerControl = 1; break;
-		default: break;
-	}
+    switch (control) 
+    {
+	case AUTO:	break;
+	case RELEASE:	playerControl = 0; break;
+	case HELD:	playerControl = 1; break;
+	default: break;
+    }
 }
 
 Vector2 GetCenterPlayerPos(void)
