@@ -107,11 +107,17 @@ void UpdatePlayer(float deltaTime)
 	float gasPad = (AccelerateInput() - BrakeInput()) * playerControl;
 	float steerPad = SteeringInput() * playerControl;
 
+	// Save last pressed control key
+	static float lastGasPad = .0f;
+	static float lastSteerPad = .0f;
+	if (!FloatEquals(gasPad, .0f)) lastGasPad = gasPad;
+	if (!FloatEquals(steerPad, .0f)) lastSteerPad = gasPad;
 
 	// Calculate engine force
 	float mass = b2Body_GetMass(car.bodyId);
-	float acceleration = 50.0f * PX_PER_METER * gasPad;
-	float engineF = mass * acceleration;
+	float acceleration = 50.0f * PX_PER_METER;
+	float maxEngineF = mass * acceleration;
+	float engineF = maxEngineF  * gasPad;
 
 	// Set engine force appplication
 	b2Vec2 forcePoint = b2Add
@@ -134,7 +140,7 @@ void UpdatePlayer(float deltaTime)
 	float steerF = .0f;
 	if (b2Length(b2Body_GetLinearVelocity(car.bodyId)) > PX_PER_METER)
 	{
-		steerF = mass * 40.0f * PX_PER_METER * steerPad;
+		steerF = mass * 40.0f * PX_PER_METER * steerPad * lastGasPad;
 	}
 
 	// Set Steering force point
@@ -144,6 +150,17 @@ void UpdatePlayer(float deltaTime)
 		b2RotateVector(b2Body_GetRotation(car.bodyId), (b2Vec2){ -carExtent.x, .0f })
 	);
 
+	// Set steering force based on velocity of car
+	b2Vec2 vel = b2Body_GetLinearVelocity(car.bodyId);
+	float velLength = b2Length(vel);
+	float airResistF = .21f * LINEAR_DAMPING * velLength * velLength;
+	float forceFrac = (maxEngineF - airResistF * .25f) / maxEngineF;
+	steerF = steerF * forceFrac;
+
+	// Adjust steering force based on car's minimum velocity
+	float deadVel = car.textureData->rect.width * 7;
+	if (velLength <= deadVel) steerF = steerF * velLength / deadVel;
+	
 	// Apply steering force
 	force = (b2Vec2){ .0f, -(steerF) };
 	b2Body_ApplyForce
@@ -155,8 +172,7 @@ void UpdatePlayer(float deltaTime)
 	);
 
 	// Fix car's slowing down behaviour
-	b2Vec2 vel = b2Body_GetLinearVelocity(car.bodyId);
-	if (b2Length(vel) <= PX_PER_METER * .3f && FloatEquals(gasPad, .0f))
+	if (velLength <= PX_PER_METER * .3f && FloatEquals(gasPad, .0f))
 	{
 		b2Body_SetLinearVelocity(car.bodyId, (b2Vec2){ .0f, .0f });
 	}
