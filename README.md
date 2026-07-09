@@ -14,7 +14,7 @@ WHAT PROGRAMS DO YOU NEED BEFORE INSTALLING THIS PROGRAM:
 HOW TO INSTALL ANONYMOUS RACING GAME TO YOUR PC:
 - go to your desired folder where you will put your game at.
     Open your teminal, then type "cd \[TARGETFOLDER]" where TARGETFOLDER is your desired target folder (case-sensitive i guess).
-    This will put you into your desired directory path, rady to get the instalation folder.
+    This will put you into your desired directory path, ready continue to getting instalation folder steps.
 - clone this repository.
     In the same terminal, type "git clone https://github.com/VrecTangleRNG/Game".
     This will retrieve all the folder present in this repository.
