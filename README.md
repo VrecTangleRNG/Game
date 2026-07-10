@@ -28,4 +28,11 @@ HOW TO INSTALL ANONYMOUS RACING GAME TO YOUR PC:
     After building process finished with no error (if you see error(s), you can contact me through my socials), type "app\o" to open the game.
     Or if you prefer open it graphically, go into [TARGETFOLDER]\Game\app\. inside, you can see "o.exe", you can double tap it to open the game.
 
+HOW TO CONTROL THE CAR:
+- KEY_UP : Accelerate
+- KEY_LEFT : Brake/decelerate
+- KEY_D : Turn right
+- KEY_A : Turn left
+To pause the game, press KEY_ESCAPE
+
 If you have anything to say (like feedback, request, or problems) you can freely contact me through my socials.
